@@ -31,6 +31,7 @@
     }
     const screen = FCE.screens[state.name] ? state.name : 'home';
     backBtn.style.visibility = screen === 'home' ? 'hidden' : 'visible';
+    screenEl.className = 'screen';
     clear(screenEl);
     root.scrollTo(0, 0);
     try {

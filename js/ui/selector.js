@@ -10,7 +10,9 @@
   const KIND_LABELS = { mixto: 'Mixto', kahoot: 'Kahoot', match: 'Relacionar', gapfill: 'Huecos', reorder: 'Ordenar' };
   const LENGTHS = [[10, '10'], [20, '20'], ['all', 'Todo']];
 
+  // Selector: subtopic tiles on the left, a sticky "Tu práctica" panel on the right (bottom bar on phones).
   FCE.screens.selector = function (el, params) {
+    el.classList.add('wide');
     const temas = FCE.temas;
     const allIds = (t) => t.secciones.map((s) => s.id);
     const selected = new Set();
@@ -21,11 +23,16 @@
     let length = 10;
 
     const counter = h('span', { class: 'counter', 'aria-live': 'polite' });
-    const message = h('p', { class: 'muted', role: 'status' });
-    const startBtn = h('button', { class: 'btn', type: 'button', onclick: start }, 'Empezar');
+    const bigCount = h('span', { class: 'big-count' });
+    const bigLabel = h('span', { class: 'muted' });
+    const message = h('p', { class: 'muted small-msg', role: 'status' });
+    const startBtn = h('button', { class: 'btn start-main', type: 'button', onclick: start }, 'Empezar');
+    const startBtn2 = h('button', { class: 'btn', type: 'button', onclick: start }, 'Empezar');
     const kindBox = h('div', { class: 'pills', role: 'group', 'aria-label': 'Tipo de ejercicio' });
     const lengthBox = h('div', { class: 'pills', role: 'group', 'aria-label': 'Número de preguntas' });
-    const checkboxes = new Map(); // sectionId -> input
+    const inputs = new Map(); // sectionId -> input
+    const tiles = new Map(); // sectionId -> label
+    const temaCount = new Map(); // temaId -> span
     const temaToggles = new Map(); // temaId -> button
 
     function itemCount() {
@@ -35,10 +42,18 @@
     function refresh() {
       const n = itemCount();
       counter.textContent = `Seleccionados: ${n} ${n === 1 ? 'ítem' : 'ítems'}`;
-      for (const [id, input] of checkboxes) input.checked = selected.has(id);
+      bigCount.textContent = String(n);
+      bigLabel.textContent = n === 1 ? 'ítem seleccionado' : 'ítems seleccionados';
+      for (const [id, input] of inputs) {
+        input.checked = selected.has(id);
+        tiles.get(id).classList.toggle('on', selected.has(id));
+      }
       for (const t of temas) {
-        const all = allIds(t).every((id) => selected.has(id));
-        temaToggles.get(t.id).textContent = all ? 'Quitar todo' : 'Marcar todo';
+        const ids = allIds(t);
+        const total = t.secciones.reduce((a, s) => a + s.items.length, 0);
+        const sel = t.secciones.filter((s) => selected.has(s.id)).reduce((a, s) => a + s.items.length, 0);
+        temaCount.get(t.id).textContent = `${sel} de ${total} ítems`;
+        temaToggles.get(t.id).textContent = ids.every((id) => selected.has(id)) ? 'Quitar todo' : 'Marcar todo';
       }
       const available = selected.size ? FCE.practice.kindsFor([...selected]) : [];
       if (kind !== 'mixto' && !available.includes(kind)) kind = 'mixto';
@@ -59,7 +74,7 @@
           }, label)
         )
       );
-      startBtn.disabled = selected.size === 0;
+      startBtn.disabled = startBtn2.disabled = selected.size === 0;
       message.textContent = selected.size === 0 ? 'Elige al menos un subtema' : '';
     }
 
@@ -73,25 +88,11 @@
     }
 
     el.append(h('h1', { class: 'title-l' }, 'Elige qué practicar'),
-      h('p', { class: 'muted', style: 'margin:6px 0 20px' }, 'Marca los temas y subtemas que entran en la práctica.'));
+      h('p', { class: 'muted', style: 'margin:6px 0 22px' }, 'Marca los subtemas que entran en la práctica.'));
 
+    const main = h('div', { class: 'sel-main' });
     for (const tema of temas) {
-      const body = h('div', { class: 'stack' });
-      for (const [grupo, label] of GROUPS) {
-        const secs = tema.secciones.filter((s) => s.grupo === grupo);
-        if (!secs.length) continue;
-        body.append(h('div', { class: 'group' },
-          h('span', { class: 'eyebrow' }, label),
-          secs.map((s) => {
-            const input = h('input', {
-              type: 'checkbox', 'data-section': s.id,
-              onchange: (e) => { if (e.target.checked) selected.add(s.id); else selected.delete(s.id); refresh(); },
-            });
-            checkboxes.set(s.id, input);
-            return h('label', { class: 'check' }, input, h('span', { class: 'check-text' }, s.titulo), h('span', { class: 'muted' }, String(s.items.length)));
-          })
-        ));
-      }
+      const count = h('span', { class: 'muted' });
       const toggle = h('button', {
         class: 'linklike', type: 'button',
         onclick: () => {
@@ -101,19 +102,46 @@
           refresh();
         },
       });
+      temaCount.set(tema.id, count);
       temaToggles.set(tema.id, toggle);
-      const details = h('details', { class: 'card tema-card', open: !pre || pre.id === tema.id },
-        h('summary', null, h('span', { class: 'title-l' }, tema.titulo)),
-        h('div', { class: 'row', style: 'justify-content:flex-end;margin:8px 0' }, toggle),
-        body);
-      el.append(details);
+
+      const card = h('section', { class: 'card tema-card' },
+        h('div', { class: 'tema-head' },
+          h('h2', { class: 'title-l' }, tema.titulo),
+          h('div', { class: 'row', style: 'gap:14px' }, count, toggle)));
+      for (const [grupo, label] of GROUPS) {
+        const secs = tema.secciones.filter((s) => s.grupo === grupo);
+        if (!secs.length) continue;
+        card.append(h('div', { class: 'group' },
+          h('span', { class: 'eyebrow' }, label),
+          h('div', { class: 'sel-grid' }, secs.map((s) => {
+            const input = h('input', {
+              type: 'checkbox', 'data-section': s.id,
+              onchange: (e) => { if (e.target.checked) selected.add(s.id); else selected.delete(s.id); refresh(); },
+            });
+            const tile = h('label', { class: 'sel-tile' },
+              input,
+              h('span', { class: 'sel-title' }, s.titulo),
+              h('span', { class: 'sel-meta' }, `${s.items.length} ${s.items.length === 1 ? 'ítem' : 'ítems'}`),
+              h('span', { class: 'sel-tick', 'aria-hidden': 'true' }, '✓'));
+            inputs.set(s.id, input);
+            tiles.set(s.id, tile);
+            return tile;
+          }))));
+      }
+      main.append(card);
     }
 
+    const side = h('aside', { class: 'card sel-side' },
+      h('span', { class: 'eyebrow' }, 'Tu práctica'),
+      h('div', { class: 'stack', style: 'gap:2px' }, bigCount, bigLabel),
+      h('div', null, h('span', { class: 'eyebrow' }, 'Tipo de ejercicio'), kindBox),
+      h('div', null, h('span', { class: 'eyebrow' }, 'Preguntas'), lengthBox),
+      startBtn, message);
+
     el.append(
-      h('section', { class: 'card stack opts' },
-        h('div', null, h('span', { class: 'eyebrow' }, 'Tipo de ejercicio'), kindBox),
-        h('div', null, h('span', { class: 'eyebrow' }, 'Preguntas'), lengthBox)),
-      h('div', { class: 'startbar glass' }, h('div', { class: 'startbar-inner' }, h('div', { class: 'stack', style: 'gap:2px' }, counter, message), startBtn))
+      h('div', { class: 'sel-layout' }, main, side),
+      h('div', { class: 'startbar glass' }, h('div', { class: 'startbar-inner' }, counter, startBtn2))
     );
     refresh();
   };
