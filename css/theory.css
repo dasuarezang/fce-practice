@@ -41,3 +41,14 @@
 .cov-table td { font-variant-numeric: tabular-nums; }
 .bad-text { color: var(--bad); font-weight: 600; }
 .small { font-size: 13px; font-weight: 400; }
+
+/* Theory layout: section menu + notes */
+.th-layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 20px; align-items: start; margin-top: 18px; }
+.th-nav { position: sticky; top: 84px; display: flex; flex-direction: column; gap: 4px; padding: 10px; border-radius: 20px; background: var(--glass-bg); -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); box-shadow: var(--glass-edge); }
+.th-link { text-align: left; border: 0; background: transparent; color: var(--text); padding: 10px 12px; border-radius: 12px; font-weight: 500; font-size: 15px; line-height: 1.25; transition: background 0.2s; }
+.th-link:hover { background: var(--line); }
+.t-expr mark, .t-box mark { border: 1px solid rgba(125, 178, 255, 0.35); }
+@media (max-width: 900px) {
+  .th-layout { grid-template-columns: 1fr; }
+  .th-nav { position: static; flex-direction: row; flex-wrap: wrap; padding: 6px; }
+}

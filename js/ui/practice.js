@@ -46,8 +46,8 @@
         const next = h('button', { class: 'btn', type: 'button', autofocus: true, onclick: show }, last ? 'See results' : 'Next');
         sheetHost.replaceChildren(
           h('div', { class: 'sheet glass ' + (ok ? 'ok' : 'bad'), role: 'status' },
-            h('h4', null, ok ? 'Correct' : 'Not quite'),
-            h('p', { class: 'explain' }, q.explain || ''),
+            h('span', { class: 'sheet-icon', 'aria-hidden': 'true' }, ok ? '✓' : '✕'),
+            h('div', { class: 'sheet-body' }, h('h4', null, ok ? 'Correct' : 'Not quite'), h('p', { class: 'explain' }, q.explain || '')),
             next));
         next.focus();
       });

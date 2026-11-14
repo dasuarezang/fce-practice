@@ -1,4 +1,4 @@
-/* Liquid Glass surfaces. Flat colours only; the edge light comes from layered inset shadows. */
+/* Liquid Glass surfaces: translucent flat colour, backdrop blur and edge light. */
 .glass {
   background: var(--glass-bg);
   -webkit-backdrop-filter: var(--glass-blur);
@@ -7,7 +7,7 @@
   box-shadow: var(--glass-edge), var(--glass-shadow);
 }
 
-/* Floating top bar */
+/* Floating top bar: back link, centred title, theme switch */
 .bar {
   position: sticky;
   top: 12px;
@@ -17,17 +17,18 @@
   border-radius: 999px;
 }
 .bar-inner {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: 12px;
   padding: 11px 20px;
 }
-.bar-title { font-weight: 700; letter-spacing: -0.02em; }
-.bar .linklike { font-size: 15px; min-width: 64px; text-align: left; }
-.bar .spacer { min-width: 64px; }
+.bar-title { font-weight: 700; letter-spacing: -0.01em; text-align: center; }
+.bar .linklike { font-size: 15px; text-align: left; justify-self: start; }
+.bar .theme-toggle { justify-self: end; font-size: 14px; color: var(--muted); }
+.bar .theme-toggle:hover { color: var(--text); text-decoration: none; }
 
-/* Feedback sheet after each answer */
+/* Feedback sheet after each answer: icon, text, action */
 .sheet {
   position: fixed;
   left: 50%;
@@ -35,9 +36,12 @@
   transform: translateX(-50%);
   width: min(736px, calc(100% - 24px));
   z-index: 30;
-  border-radius: 30px;
-  padding: 20px 22px;
+  border-radius: 26px;
+  padding: 16px 18px 16px 20px;
   background: var(--glass-bg-strong);
+  display: flex;
+  align-items: center;
+  gap: 16px;
   animation: sheet-in 0.4s var(--ease);
 }
 @keyframes sheet-in {
@@ -46,7 +50,25 @@
 }
 .sheet.ok { border-color: var(--ok); }
 .sheet.bad { border-color: var(--bad); }
-.sheet h4 { font-size: 18px; margin-bottom: 4px; }
+.sheet-icon {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-weight: 800;
+  color: #06101f;
+}
+.sheet.ok .sheet-icon { background: var(--ok); }
+.sheet.bad .sheet-icon { background: var(--bad); }
+.sheet-body { flex: 1; min-width: 0; }
+.sheet h4 { font-size: 17px; margin-bottom: 2px; }
 .sheet.ok h4 { color: var(--ok); }
 .sheet.bad h4 { color: var(--bad); }
-.sheet .explain { white-space: pre-line; margin-bottom: 14px; }
+.sheet .explain { white-space: pre-line; overflow-wrap: anywhere; }
+.sheet .btn { flex: none; }
+@media (max-width: 560px) {
+  .sheet { flex-wrap: wrap; }
+  .sheet .btn { width: 100%; }
+}

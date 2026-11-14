@@ -44,9 +44,22 @@
 
   function start() {
     const app = document.getElementById('app');
+    const themeBtn = h('button', { class: 'linklike theme-toggle', type: 'button', onclick: toggleTheme }, '');
+    function paintTheme() {
+      const light = document.documentElement.getAttribute('data-theme') === 'light';
+      themeBtn.textContent = light ? 'Dark mode' : 'Light mode';
+    }
+    function toggleTheme() {
+      const light = document.documentElement.getAttribute('data-theme') === 'light';
+      if (light) document.documentElement.removeAttribute('data-theme');
+      else document.documentElement.setAttribute('data-theme', 'light');
+      try { localStorage.setItem('fce.theme', light ? 'dark' : 'light'); } catch (e) { /* storage unavailable: the choice only lasts this visit */ }
+      paintTheme();
+    }
+    paintTheme();
     backBtn = h('button', { class: 'linklike', type: 'button', onclick: () => go('home') }, '‹ Home');
     const bar = h('header', { class: 'bar glass' },
-      h('div', { class: 'bar-inner' }, backBtn, h('span', { class: 'bar-title' }, 'FCE Practice'), h('span', { class: 'spacer' })));
+      h('div', { class: 'bar-inner' }, backBtn, h('span', { class: 'bar-title' }, 'FCE Practice'), themeBtn));
     screenEl = h('main', { class: 'screen', id: 'screen' });
     app.append(bar, screenEl);
     root.addEventListener('hashchange', render);
