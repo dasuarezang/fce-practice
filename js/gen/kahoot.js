@@ -37,14 +37,14 @@
       case 'pares': {
         const explain = `${it.termino} = ${it.definicion}`;
         if (rng.next() < 0.5) {
-          return assemble(entry, rng, `¿Qué significa «${it.termino}»?`, it.definicion,
+          return assemble(entry, rng, `What does “${it.termino}” mean?`, it.definicion,
             candidates(entry, pool, (i) => i.definicion, (i) => i.termino), explain);
         }
-        return assemble(entry, rng, `¿Qué expresión significa «${it.definicion}»?`, it.termino,
+        return assemble(entry, rng, `Which expression means “${it.definicion}”?`, it.termino,
           candidates(entry, pool, (i) => i.termino, (i) => i.termino), explain);
       }
       case 'antonimos':
-        return assemble(entry, rng, `¿Cuál es el contrario de «${it.positivo}»?`, it.negativo,
+        return assemble(entry, rng, `What is the opposite of “${it.positivo}”?`, it.negativo,
           candidates(entry, pool, (i) => i.negativo, (i) => i.positivo), `${it.positivo} ↔ ${it.negativo}`);
       case 'colocaciones': {
         const options = ['do', 'make'];
@@ -56,21 +56,21 @@
       case 'tabla': {
         const comp = rng.next() < 0.5;
         const field = comp ? 'comparativo' : 'superlativo';
-        return assemble(entry, rng, `${comp ? 'Comparativo' : 'Superlativo'} de «${it.base}»`, it[field],
+        return assemble(entry, rng, `${comp ? 'Comparative' : 'Superlative'} of “${it.base}”`, it[field],
           candidates(entry, pool, (i) => i[field], (i) => i.base), `${it.base} → ${it.comparativo} → ${it.superlativo}`);
       }
       case 'regla': {
         const punto = rng.pick(it.puntos, 1)[0];
-        return assemble(entry, rng, `¿A cuál corresponde: «${punto}»?`, it.titulo,
+        return assemble(entry, rng, `Which one does this describe: “${punto}”?`, it.titulo,
           candidates(entry, pool, (i) => i.titulo, (i) => i.id, true), `${it.titulo}: ${it.formula}`);
       }
       case 'estructura':
         if (rng.next() < 0.5) {
           // By purpose: same-purpose formulas are excluded from the options, so only one fits.
-          return assemble(entry, rng, `¿Qué estructura usarías para: «${it.proposito}»?`, it.formula,
+          return assemble(entry, rng, `Which structure fits: “${it.proposito}”?`, it.formula,
             candidates(entry, pool, (i) => i.formula, (i) => i.proposito), `${it.proposito}: ${it.formula}`);
         }
-        return assemble(entry, rng, `¿Qué estructura se usa en: «${gen.firstSentence(it.ejemplo)}»?`, it.formula,
+        return assemble(entry, rng, `Which structure is used in: “${gen.firstSentence(it.ejemplo)}”?`, it.formula,
           candidates(entry, pool, (i) => i.formula, (i) => i.id), `${it.proposito}: ${it.formula}`);
       default:
         return null;

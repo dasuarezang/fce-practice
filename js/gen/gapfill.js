@@ -72,18 +72,18 @@
     for (const { item: it, section } of entries) {
       switch (section.tipo) {
         case 'pares':
-          out.push(q(it, `«${it.definicion}» → ___`, gen.variants(it.termino), `${it.termino} = ${it.definicion}`));
+          out.push(q(it, `“${it.definicion}” → ___`, gen.variants(it.termino), `${it.termino} = ${it.definicion}`));
           break;
         case 'antonimos':
-          out.push(q(it, `«${it.positivo}» → ___ (contrario)`, gen.variants(it.negativo), `${it.positivo} ↔ ${it.negativo}`));
+          out.push(q(it, `“${it.positivo}” → ___ (opposite)`, gen.variants(it.negativo), `${it.positivo} ↔ ${it.negativo}`));
           break;
         case 'colocaciones':
           out.push(q(it, `___ ${it.resto}`, [it.verbo], `${it.verbo} ${it.resto}`, ['do', 'make']));
           break;
         case 'tabla': {
           const exp = `${it.base} → ${it.comparativo} → ${it.superlativo}`;
-          out.push(q(it, `${it.base} → ___ (comparativo)`, gen.variants(it.comparativo), exp));
-          out.push(q(it, `${it.base} → ___ (superlativo)`, gen.variants(it.superlativo), exp));
+          out.push(q(it, `${it.base} → ___ (comparative)`, gen.variants(it.comparativo), exp));
+          out.push(q(it, `${it.base} → ___ (superlative)`, gen.variants(it.superlativo), exp));
           break;
         }
         case 'estructura':

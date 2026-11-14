@@ -9,9 +9,9 @@
     render(el, q, onAnswer) {
       let locked = false;
       let suppressClick = false;
-      const target = h('div', { class: 'word-area target', 'aria-label': 'Tu frase', 'data-area': 'target' });
-      const pool = h('div', { class: 'word-area pool', 'aria-label': 'Palabras', 'data-area': 'pool' });
-      const btn = h('button', { class: 'btn', type: 'button', disabled: true, onclick: check }, 'Comprobar');
+      const target = h('div', { class: 'word-area target', 'aria-label': 'Your sentence', 'data-area': 'target' });
+      const pool = h('div', { class: 'word-area pool', 'aria-label': 'Words', 'data-area': 'pool' });
+      const btn = h('button', { class: 'btn', type: 'button', disabled: true, onclick: check }, 'Check');
 
       function place(chip, area, before) {
         if (locked) return;
@@ -76,7 +76,7 @@
       }
 
       el.append(
-        h('p', { class: 'muted', style: 'margin-bottom:12px' }, 'Ordena las palabras para formar la frase.'),
+        h('p', { class: 'muted', style: 'margin-bottom:12px' }, 'Put the words in order to form the sentence.'),
         target, pool, h('div', { class: 'actions' }, btn));
     },
   };

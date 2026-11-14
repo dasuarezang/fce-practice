@@ -8,7 +8,7 @@
     ['hang out', 'spend time with someone'],
     ['count on', 'rely on; depend on'],
     ['turn into', 'become; transform'],
-    ['make it up', 'invent; lie', '¿invent; lie? Confirmar la última palabra contra el cuaderno'],
+    ['make it up', 'invent; lie', 'Is it "invent; lie"? Confirm the last word against the notebook'],
     ['carry on', 'continue'],
     ['turn up', 'arrive; appear'],
   ].map(([termino, definicion, revisar]) => {

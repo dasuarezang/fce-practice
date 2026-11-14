@@ -44,7 +44,7 @@
 
   function start() {
     const app = document.getElementById('app');
-    backBtn = h('button', { class: 'linklike', type: 'button', onclick: () => go('home') }, '‹ Inicio');
+    backBtn = h('button', { class: 'linklike', type: 'button', onclick: () => go('home') }, '‹ Home');
     const bar = h('header', { class: 'bar glass' },
       h('div', { class: 'bar-inner' }, backBtn, h('span', { class: 'bar-title' }, 'FCE Practice'), h('span', { class: 'spacer' })));
     screenEl = h('main', { class: 'screen', id: 'screen' });

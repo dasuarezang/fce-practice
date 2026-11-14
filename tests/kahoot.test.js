@@ -102,7 +102,7 @@ test('estructura also asks by purpose, and shared purposes never leak into the o
   let byPurpose = 0;
   for (let seed = 1; seed <= 40; seed++) {
     for (const q of FCE.gen.kahoot(entries, pool('estructura'), FCE.rng.make(seed))) {
-      if (!q.prompt.startsWith('¿Qué estructura usarías para')) continue;
+      if (!q.prompt.startsWith('Which structure fits')) continue;
       byPurpose++;
       const it = entries.find((e) => e.item.id === q.itemIds[0]).item;
       assert.strictEqual(q.options[q.answer], it.formula);

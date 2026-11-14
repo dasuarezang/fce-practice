@@ -16,7 +16,7 @@
     const sheetHost = h('div');
     el.append(
       h('div', { class: 'stack', style: 'gap:10px;margin-bottom:22px' },
-        h('div', { class: 'row', style: 'justify-content:space-between' }, h('span', { class: 'eyebrow' }, 'Práctica'), counter),
+        h('div', { class: 'row', style: 'justify-content:space-between' }, h('span', { class: 'eyebrow' }, 'Practice'), counter),
         h('div', { class: 'progress' }, bar)),
       stage, sheetHost);
 
@@ -33,7 +33,7 @@
       stage.replaceChildren();
       const ui = FCE.ui[q.kind];
       if (!ui) {
-        stage.append(h('p', { class: 'muted' }, 'Tipo de ejercicio no disponible.'));
+        stage.append(h('p', { class: 'muted' }, 'This exercise type is not available.'));
         return;
       }
       let answered = false;
@@ -43,10 +43,10 @@
         FCE.progress.record(q.itemIds, ok);
         session.submit(ok);
         const last = session.done();
-        const next = h('button', { class: 'btn', type: 'button', autofocus: true, onclick: show }, last ? 'Ver resultados' : 'Siguiente');
+        const next = h('button', { class: 'btn', type: 'button', autofocus: true, onclick: show }, last ? 'See results' : 'Next');
         sheetHost.replaceChildren(
           h('div', { class: 'sheet glass ' + (ok ? 'ok' : 'bad'), role: 'status' },
-            h('h4', null, ok ? '¡Correcto!' : 'No era esa'),
+            h('h4', null, ok ? 'Correct' : 'Not quite'),
             h('p', { class: 'explain' }, q.explain || ''),
             next));
         next.focus();

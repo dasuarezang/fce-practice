@@ -47,14 +47,14 @@
         if (i < parts.length - 1) {
           const input = h('input', {
             class: 'gap-input', type: 'text', autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false',
-            'aria-label': `Hueco ${i + 1}`,
+            'aria-label': `Blank ${i + 1}`,
             onkeydown: (e) => { if (e.key === 'Enter') check(); },
           });
           inputs.push(input);
           line.append(input);
         }
       });
-      const btn = h('button', { class: 'btn', type: 'button', onclick: check }, 'Comprobar');
+      const btn = h('button', { class: 'btn', type: 'button', onclick: check }, 'Check');
       el.append(line, h('div', { class: 'actions' }, btn));
       inputs[0].focus();
 

@@ -24,7 +24,7 @@
       for (const s of current.secciones) body.append(h('div', { class: 'card solid theory', html: FCE.theory.render(s) }));
     }
 
-    el.append(h('h1', { class: 'title-l', style: 'margin-bottom:14px' }, 'Teoría'), tabs, h('div', { style: 'height:12px' }), toc, h('div', { style: 'height:18px' }), body);
+    el.append(h('h1', { class: 'title-l', style: 'margin-bottom:14px' }, 'Theory'), tabs, h('div', { style: 'height:12px' }), toc, h('div', { style: 'height:18px' }), body);
     paint();
   };
 })(globalThis);

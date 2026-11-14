@@ -3,14 +3,14 @@
   const { h } = FCE.dom;
 
   const GROUPS = [
-    ['vocabulario', 'Vocabulario'],
-    ['gramatica', 'Gramática'],
+    ['vocabulario', 'Vocabulary'],
+    ['gramatica', 'Grammar'],
     ['expressions', 'Expressions'],
   ];
-  const KIND_LABELS = { mixto: 'Mixto', kahoot: 'Kahoot', match: 'Relacionar', gapfill: 'Huecos', reorder: 'Ordenar' };
-  const LENGTHS = [[10, '10'], [20, '20'], ['all', 'Todo']];
+  const KIND_LABELS = { mixto: 'Mixed', kahoot: 'Kahoot', match: 'Match', gapfill: 'Gap-fill', reorder: 'Reorder' };
+  const LENGTHS = [[10, '10'], [20, '20'], ['all', 'All']];
 
-  // Selector: subtopic tiles on the left, a sticky "Tu práctica" panel on the right (bottom bar on phones).
+  // Selector: subtopic tiles on the left, a sticky "Your practice" panel on the right (bottom bar on phones).
   FCE.screens.selector = function (el, params) {
     el.classList.add('wide');
     const temas = FCE.temas;
@@ -26,10 +26,10 @@
     const bigCount = h('span', { class: 'big-count' });
     const bigLabel = h('span', { class: 'muted' });
     const message = h('p', { class: 'muted small-msg', role: 'status' });
-    const startBtn = h('button', { class: 'btn start-main', type: 'button', onclick: start }, 'Empezar');
-    const startBtn2 = h('button', { class: 'btn', type: 'button', onclick: start }, 'Empezar');
-    const kindBox = h('div', { class: 'pills', role: 'group', 'aria-label': 'Tipo de ejercicio' });
-    const lengthBox = h('div', { class: 'pills', role: 'group', 'aria-label': 'Número de preguntas' });
+    const startBtn = h('button', { class: 'btn start-main', type: 'button', onclick: start }, 'Start');
+    const startBtn2 = h('button', { class: 'btn', type: 'button', onclick: start }, 'Start');
+    const kindBox = h('div', { class: 'pills', role: 'group', 'aria-label': 'Exercise type' });
+    const lengthBox = h('div', { class: 'pills', role: 'group', 'aria-label': 'Number of questions' });
     const inputs = new Map(); // sectionId -> input
     const tiles = new Map(); // sectionId -> label
     const temaCount = new Map(); // temaId -> span
@@ -41,9 +41,9 @@
 
     function refresh() {
       const n = itemCount();
-      counter.textContent = `Seleccionados: ${n} ${n === 1 ? 'ítem' : 'ítems'}`;
+      counter.textContent = `Selected: ${n} ${n === 1 ? 'item' : 'items'}`;
       bigCount.textContent = String(n);
-      bigLabel.textContent = n === 1 ? 'ítem seleccionado' : 'ítems seleccionados';
+      bigLabel.textContent = n === 1 ? 'item selected' : 'items selected';
       for (const [id, input] of inputs) {
         input.checked = selected.has(id);
         tiles.get(id).classList.toggle('on', selected.has(id));
@@ -52,8 +52,8 @@
         const ids = allIds(t);
         const total = t.secciones.reduce((a, s) => a + s.items.length, 0);
         const sel = t.secciones.filter((s) => selected.has(s.id)).reduce((a, s) => a + s.items.length, 0);
-        temaCount.get(t.id).textContent = `${sel} de ${total} ítems`;
-        temaToggles.get(t.id).textContent = ids.every((id) => selected.has(id)) ? 'Quitar todo' : 'Marcar todo';
+        temaCount.get(t.id).textContent = `${sel} of ${total} items`;
+        temaToggles.get(t.id).textContent = ids.every((id) => selected.has(id)) ? 'Clear all' : 'Select all';
       }
       const available = selected.size ? FCE.practice.kindsFor([...selected]) : [];
       if (kind !== 'mixto' && !available.includes(kind)) kind = 'mixto';
@@ -75,20 +75,20 @@
         )
       );
       startBtn.disabled = startBtn2.disabled = selected.size === 0;
-      message.textContent = selected.size === 0 ? 'Elige al menos un subtema' : '';
+      message.textContent = selected.size === 0 ? 'Choose at least one subtopic' : '';
     }
 
     function start() {
       const questions = FCE.practice.build({ sectionIds: [...selected], kind, length });
       if (!questions.length) {
-        message.textContent = 'Con esta selección no hay preguntas de ese tipo. Prueba con otro tipo.';
+        message.textContent = 'This selection has no questions of that type. Try another type.';
         return;
       }
       FCE.app.go('practice', { questions });
     }
 
-    el.append(h('h1', { class: 'title-l' }, 'Elige qué practicar'),
-      h('p', { class: 'muted', style: 'margin:6px 0 22px' }, 'Marca los subtemas que entran en la práctica.'));
+    el.append(h('h1', { class: 'title-l' }, 'Choose what to practise'),
+      h('p', { class: 'muted', style: 'margin:6px 0 22px' }, 'Tick the subtopics to include.'));
 
     const main = h('div', { class: 'sel-main' });
     for (const tema of temas) {
@@ -122,7 +122,7 @@
             const tile = h('label', { class: 'sel-tile' },
               input,
               h('span', { class: 'sel-title' }, s.titulo),
-              h('span', { class: 'sel-meta' }, `${s.items.length} ${s.items.length === 1 ? 'ítem' : 'ítems'}`),
+              h('span', { class: 'sel-meta' }, `${s.items.length} ${s.items.length === 1 ? 'item' : 'items'}`),
               h('span', { class: 'sel-tick', 'aria-hidden': 'true' }, '✓'));
             inputs.set(s.id, input);
             tiles.set(s.id, tile);
@@ -133,10 +133,10 @@
     }
 
     const side = h('aside', { class: 'card sel-side' },
-      h('span', { class: 'eyebrow' }, 'Tu práctica'),
+      h('span', { class: 'eyebrow' }, 'Your practice'),
       h('div', { class: 'stack', style: 'gap:2px' }, bigCount, bigLabel),
-      h('div', null, h('span', { class: 'eyebrow' }, 'Tipo de ejercicio'), kindBox),
-      h('div', null, h('span', { class: 'eyebrow' }, 'Preguntas'), lengthBox),
+      h('div', null, h('span', { class: 'eyebrow' }, 'Exercise type'), kindBox),
+      h('div', null, h('span', { class: 'eyebrow' }, 'Questions'), lengthBox),
       startBtn, message);
 
     el.append(

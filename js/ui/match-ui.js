@@ -61,9 +61,9 @@
       }
       board.append(leftCol, rightCol, svg);
 
-      const btn = h('button', { class: 'btn', type: 'button', disabled: true, onclick: check }, 'Comprobar');
+      const btn = h('button', { class: 'btn', type: 'button', disabled: true, onclick: check }, 'Check');
       el.append(
-        h('p', { class: 'muted', style: 'margin-bottom:14px' }, 'Arrastra desde el punto de cada tarjeta de la izquierda hasta su pareja (o toca una y luego su pareja).'),
+        h('p', { class: 'muted', style: 'margin-bottom:14px' }, 'Drag from the dot on each left card to its match (or tap a card, then tap its match).'),
         board, h('div', { class: 'actions' }, btn));
 
       function center(dot) {
@@ -101,12 +101,12 @@
           card.classList.toggle('picked', selected === id);
           card.setAttribute('aria-pressed', String(selected === id));
           const to = links.get(id);
-          card.setAttribute('aria-label', textOf(q.left, id) + (to !== undefined ? ' — enlazado con ' + textOf(q.right, to) : ' — sin enlazar'));
+          card.setAttribute('aria-label', textOf(q.left, id) + (to !== undefined ? ' — linked to ' + textOf(q.right, to) : ' — not linked'));
         }
         for (const [id, card] of rightCards) {
           const from = [...links].filter(([, r]) => r === id).map(([l]) => textOf(q.left, l));
           card.classList.toggle('linked', from.length > 0);
-          card.setAttribute('aria-label', textOf(q.right, id) + (from.length ? ' — enlazado con ' + from.join(', ') : ''));
+          card.setAttribute('aria-label', textOf(q.right, id) + (from.length ? ' — linked to ' + from.join(', ') : ''));
         }
         btn.disabled = locked || links.size < q.left.length;
       }
