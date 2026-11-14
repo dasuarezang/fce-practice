@@ -180,7 +180,7 @@
 - [ ] **Step 1: Guard test** `tests/no-gradients.test.js`: reads every `.css` and `.html` under the repo (excluding `node_modules`, `docs`) and asserts none contains `gradient`. It passes now (no files yet) and guards every later task.
 - [ ] **Step 2:** Build shell, styles and home, one file per screen under `js/ui/`; run `npm test` → PASS.
 - [ ] **Step 3: Verify in browser:** run `python -m http.server 8000`, open `http://localhost:8000`. Expect: the two cards with the exact titles, correct in light and dark (toggle OS theme), no horizontal scroll at 360px (devtools), top bar blurs content when scrolling.
-- [ ] **Step 5: Commit** `"Add app shell and home screen"`.
+- [ ] **Step 4: Commit** `"Add app shell and home screen"`.
 
 ### Task 12: Selector screen
 
