@@ -74,9 +74,13 @@
 
       function mkLine(a, b, cls) {
         const hit = document.createElementNS(SVG, 'line');
+        const len = Math.hypot(b.x - a.x, b.y - a.y);
+        const k = len > 40 ? 14 / len : 0; // keep the hit area off the dots
+        const ha = { x: a.x + (b.x - a.x) * k, y: a.y + (b.y - a.y) * k };
+        const hb = { x: b.x - (b.x - a.x) * k, y: b.y - (b.y - a.y) * k };
         const line = document.createElementNS(SVG, 'line');
-        for (const [ln, c] of [[hit, 'hit'], [line, 'ln ' + (cls || '')]]) {
-          ln.setAttribute('x1', a.x); ln.setAttribute('y1', a.y); ln.setAttribute('x2', b.x); ln.setAttribute('y2', b.y);
+        for (const [ln, c, p, q] of [[hit, 'hit', ha, hb], [line, 'ln ' + (cls || ''), a, b]]) {
+          ln.setAttribute('x1', p.x); ln.setAttribute('y1', p.y); ln.setAttribute('x2', q.x); ln.setAttribute('y2', q.y);
           ln.setAttribute('class', c);
         }
         return [hit, line];
@@ -132,7 +136,7 @@
         locked = true;
         verdict = new Map();
         for (const l of q.left) verdict.set(l.id, links.get(l.id) === q.pairs[l.id]);
-        for (const [id, card] of leftCards) card.classList.add(verdict.get(id) ? 'right' : 'wrong');
+        for (const [id, card] of leftCards) card.classList.add(verdict.get(id) ? 'is-ok' : 'is-bad');
         paint();
         onAnswer([...verdict.values()].every(Boolean));
       }

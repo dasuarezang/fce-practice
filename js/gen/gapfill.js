@@ -30,7 +30,7 @@
     return String(s)
       .normalize('NFD').replace(/[̀-ͯ]/g, '')
       .toLowerCase()
-      .replace(/[,;]/g, ' ')
+      .replace(/[,;-]/g, ' ')
       .replace(/\s+/g, ' ')
       .trim()
       .replace(/[.!?¡¿]+$/g, '')
@@ -40,7 +40,8 @@
   gen.matches = function (q, input) {
     const n = norm(input);
     if (!n) return false;
-    return q.answers.some((a) => norm(a) === n);
+    const key = (s) => norm(s).replace(/ /g, '');
+    return q.answers.some((a) => key(a) === key(n));
   };
 
   // "{{so/as}} ... {{as}}" -> text with ___ and every combination of per-gap alternatives.

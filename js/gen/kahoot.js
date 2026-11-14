@@ -65,6 +65,11 @@
           candidates(entry, pool, (i) => i.titulo, (i) => i.id, true), `${it.titulo}: ${it.formula}`);
       }
       case 'estructura':
+        if (rng.next() < 0.5) {
+          // By purpose: same-purpose formulas are excluded from the options, so only one fits.
+          return assemble(entry, rng, `¿Qué estructura usarías para: «${it.proposito}»?`, it.formula,
+            candidates(entry, pool, (i) => i.formula, (i) => i.proposito), `${it.proposito}: ${it.formula}`);
+        }
         return assemble(entry, rng, `¿Qué estructura se usa en: «${gen.firstSentence(it.ejemplo)}»?`, it.formula,
           candidates(entry, pool, (i) => i.formula, (i) => i.id), `${it.proposito}: ${it.formula}`);
       default:

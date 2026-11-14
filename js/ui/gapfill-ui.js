@@ -60,6 +60,7 @@
 
       function check() {
         if (locked) return;
+        if (inputs.some((i) => !i.value.trim())) { inputs.find((i) => !i.value.trim()).focus(); return; }
         const value = inputs.map((i) => i.value.trim()).join(', ');
         btn.disabled = true;
         finish(FCE.gen.matches(q, value));

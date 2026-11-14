@@ -37,10 +37,12 @@ test('failedIds lists items with wrong>0 and reset clears everything', () => {
 test('throwing storage does not throw and returns empty stats', () => {
   const boom = { getItem() { throw new Error('denied'); }, setItem() { throw new Error('denied'); } };
   const s = FCE.store.create(boom);
-  assert.doesNotThrow(() => s.record(['a'], true));
   assert.deepStrictEqual(s.stats('a'), { seen: 0, wrong: 0 });
   assert.deepStrictEqual(s.failedIds(), []);
+  assert.doesNotThrow(() => s.record(['a'], true));
+  assert.deepStrictEqual(s.stats('a'), { seen: 1, wrong: 0 }); // kept in memory for this session
   assert.doesNotThrow(() => s.reset());
+  assert.deepStrictEqual(s.stats('a'), { seen: 0, wrong: 0 });
 });
 
 test('invalid JSON or wrong shape in storage is treated as empty', () => {
@@ -56,4 +58,11 @@ test('missing localStorage entirely still works (no storage available)', () => {
   const s = FCE.store.create(null);
   assert.doesNotThrow(() => s.record(['a'], true));
   assert.deepStrictEqual(s.failedIds(), []);
+});
+
+test('when getItem throws but setItem works, progress still accumulates in memory', () => {
+  const s = FCE.store.create({ getItem() { throw new Error('denied'); }, setItem() {} });
+  s.record(['a'], false);
+  s.record(['a'], true);
+  assert.deepStrictEqual(s.stats('a'), { seen: 2, wrong: 1 });
 });

@@ -84,7 +84,7 @@
     E('much-more', 'To express large differences',
       'much/far/a lot/considerably + adjective/adverb + -er/more + adjective/adverb',
       'Acts of kindness are often much more common when societies face big challenges.',
-      'Acts of kindness are often {{much}} more common when societies face big challenges.', 4),
+      'Acts of kindness are often {{much/far/a lot/considerably}} more common when societies face big challenges.', 4),
     E('not-nearly', 'To express large differences', 'not nearly as + adjective/adverb + as',
       'The study of genetics is not nearly as well developed as we would wish.',
       'The study of genetics is {{not nearly as}} well developed {{as}} we would wish.', 4,
@@ -99,7 +99,7 @@
     E('slightly', 'To express small differences',
       'slightly/a bit/a little + adjective/adverb + -er/more + adjective/adverb',
       'Because of the new gambling law, people spend slightly less time in casinos than they did in the past.',
-      'Because of the new gambling law, people spend {{slightly}} less time in casinos than they did in the past.', 5),
+      'Because of the new gambling law, people spend {{slightly/a bit/a little}} less time in casinos than they did in the past.', 5),
     E('not-quite', 'To express small differences', 'not quite as + adjective/adverb + as',
       'The launch of the new product was not quite as successful as anticipated.',
       'The launch of the new product was {{not quite as}} successful {{as}} anticipated.', 5),
@@ -111,7 +111,14 @@
     secciones: [
       { id: 't2-phrasal', titulo: 'Phrasal verbs & expressions', grupo: 'vocabulario', tipo: 'pares', items: phrasal },
       { id: 't2-ed-ing', titulo: 'Adjectives ending -ed, -ing', grupo: 'gramatica', tipo: 'regla', items: edIng },
-      { id: 't2-comparativos', titulo: 'Comparatives and superlatives', grupo: 'gramatica', tipo: 'tabla', items: comparativos },
+      {
+        id: 't2-comparativos', titulo: 'Comparatives and superlatives', grupo: 'gramatica', tipo: 'tabla', items: comparativos,
+        intro: [
+          'Comparative adjectives: they compare two things.',
+          'Superlative adjectives: they compare one thing to a group.',
+          'Three or more syllables: more + adjective (comparative) / most + adjective (superlative).',
+        ],
+      },
       { id: 't2-irregulares', titulo: 'Irregular adjectives', grupo: 'gramatica', tipo: 'tabla', items: irregulares },
       { id: 't2-expressions', titulo: 'Comparison expressions', grupo: 'expressions', tipo: 'estructura', items: expressions },
     ],

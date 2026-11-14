@@ -96,3 +96,20 @@ test('same seed gives same questions', () => {
 test('SUPPORT lists at least two kinds for every tipo', () => {
   for (const [tipo, kinds] of Object.entries(FCE.gen.SUPPORT)) assert.ok(kinds.length >= 2, tipo);
 });
+
+test('estructura also asks by purpose, and shared purposes never leak into the options (seeds 1-40)', () => {
+  const entries = ofSection('t2-expressions');
+  let byPurpose = 0;
+  for (let seed = 1; seed <= 40; seed++) {
+    for (const q of FCE.gen.kahoot(entries, pool('estructura'), FCE.rng.make(seed))) {
+      if (!q.prompt.startsWith('¿Qué estructura usarías para')) continue;
+      byPurpose++;
+      const it = entries.find((e) => e.item.id === q.itemIds[0]).item;
+      assert.strictEqual(q.options[q.answer], it.formula);
+      const sameKind = entries.filter((e) => e.item.proposito === it.proposito).map((e) => e.item.formula);
+      assert.strictEqual(q.options.filter((o) => sameKind.includes(o)).length, 1, q.prompt);
+      assert.ok(q.options.length >= 4);
+    }
+  }
+  assert.ok(byPurpose > 0, 'purpose-based prompt never generated');
+});

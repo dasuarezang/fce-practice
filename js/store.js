@@ -25,7 +25,7 @@
         }
         return {};
       } catch (e) {
-        return {};
+        return memory;
       }
     }
 

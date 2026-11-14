@@ -81,3 +81,17 @@ test('regla without hueco produces no gapfill question', () => {
   assert.strictEqual(run('t1-present-perfect').length, 0);
   assert.strictEqual(run('t2-ed-ing').length, 0);
 });
+
+test('expression gaps accept every alternative the notes list (much/far/a lot/considerably, slightly/a bit/a little)', () => {
+  const much = qOf(run('t2-expressions'), 't2-expr-much-more');
+  for (const a of ['much', 'far', 'a lot', 'considerably', 'Far']) assert.ok(FCE.gen.matches(much, a), a);
+  const slightly = qOf(run('t2-expressions'), 't2-expr-slightly');
+  for (const a of ['slightly', 'a bit', 'a little']) assert.ok(FCE.gen.matches(slightly, a), a);
+  assert.ok(!FCE.gen.matches(slightly, 'much'));
+});
+
+test('hyphens and spaces are interchangeable: "hard working", "hardworking", "Bad tempered"', () => {
+  const hw = { answers: ['hard-working'] };
+  for (const a of ['hard-working', 'hard working', 'hardworking', 'Hard  Working.']) assert.ok(FCE.gen.matches(hw, a), a);
+  assert.ok(!FCE.gen.matches(hw, 'hard'));
+});

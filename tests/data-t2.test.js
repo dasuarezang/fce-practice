@@ -47,8 +47,16 @@ test('items doubtful in the notes carry revisar', () => {
 test('every expression hueco contains at least one {{gap}} and its text matches ejemplo once unwrapped', () => {
   for (const e of t2().secciones.find((s) => s.id === 't2-expressions').items) {
     assert.ok(/\{\{.+?\}\}/.test(e.hueco), e.id);
-    const plain = e.hueco.replace(/\{\{|\}\}/g, '');
-    assert.ok(e.ejemplo.startsWith(plain) || e.ejemplo.includes(plain), e.id);
+    // each {{gap}} may list alternatives (a/b/c): the example must contain one of them (or the whole "a/b" text)
+    const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const pattern = e.hueco
+      .split(/(\{\{.+?\}\})/)
+      .map((part) => {
+        const m = part.match(/^\{\{(.+)\}\}$/);
+        return m ? '(?:' + [...m[1].split('/').map(esc), esc(m[1])].join('|') + ')' : esc(part);
+      })
+      .join('');
+    assert.ok(new RegExp(pattern).test(e.ejemplo), e.id);
   }
 });
 

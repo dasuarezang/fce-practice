@@ -15,6 +15,14 @@
     else render();
   }
 
+  // Same as go() but replaces the history entry (used for 'no params' fallbacks so Back is not trapped).
+  function replace(name) {
+    state.name = name;
+    state.params = {};
+    location.replace('#/' + name);
+    if (location.hash === '#/' + name) render();
+  }
+
   function render() {
     const wanted = location.hash.replace(/^#\//, '') || 'home';
     if (wanted !== state.name) {
@@ -44,7 +52,7 @@
     render();
   }
 
-  FCE.app = { go, start };
+  FCE.app = { go, replace, start };
   if (typeof document !== 'undefined') {
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
     else start();

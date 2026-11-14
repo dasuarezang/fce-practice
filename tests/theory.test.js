@@ -45,3 +45,11 @@ test('revisar does not change the visible theory text', () => {
   const s = FCE.temas[0].secciones.find((x) => x.id === 't1-phrasal');
   assert.ok(!FCE.theory.render(s).includes('Confirmar'));
 });
+
+test('comparatives section carries the "comparison vocabulary" definitions and the 3+ syllables rule', () => {
+  const s = FCE.temas[1].secciones.find((x) => x.id === 't2-comparativos');
+  const html = FCE.theory.render(s);
+  assert.ok(/compare two things/i.test(html));
+  assert.ok(/compare one thing to a group/i.test(html));
+  assert.ok(html.includes('more + adjective') && html.includes('most + adjective'));
+});

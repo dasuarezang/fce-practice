@@ -6,7 +6,7 @@
   FCE.screens.practice = function (el, params) {
     const questions = (params && params.questions) || [];
     if (!questions.length) {
-      FCE.app.go('selector');
+      FCE.app.replace('selector');
       return;
     }
     const session = FCE.session.create(questions);

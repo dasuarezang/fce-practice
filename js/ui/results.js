@@ -6,7 +6,7 @@
     const summary = params && params.summary;
     const questions = (params && params.questions) || [];
     if (!summary) {
-      FCE.app.go('home');
+      FCE.app.replace('home');
       return;
     }
     const pct = summary.total ? Math.round((summary.correct / summary.total) * 100) : 0;

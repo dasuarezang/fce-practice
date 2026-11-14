@@ -62,7 +62,10 @@
 
   function render(section) {
     const body = (RENDERERS[section.tipo] || (() => ''))(section);
-    return `<section class="t-section" data-section-id="${e(section.id)}"><h3>${e(section.titulo)}</h3>${body}</section>`;
+    const intro = section.intro && section.intro.length
+      ? `<ul class="t-intro">${section.intro.map((l) => `<li>${e(l)}</li>`).join('')}</ul>`
+      : '';
+    return `<section class="t-section" data-section-id="${e(section.id)}"><h3>${e(section.titulo)}</h3>${intro}${body}</section>`;
   }
 
   FCE.theory = { render, escape };
