@@ -1,4 +1,4 @@
-# FCE Practice — Design Spec
+    # FCE Practice — Design Spec
 
 Fecha: 2026-11-14 · Estado: pendiente de revisión del usuario
 
