@@ -3,5 +3,6 @@
 (function (root) {
   if (typeof require === 'function' && typeof module !== 'undefined') {
     require('./tema1-family-affair.js');
+    require('./tema2-leisure-pleasure.js');
   }
 })(globalThis);
