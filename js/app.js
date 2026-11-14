@@ -44,10 +44,16 @@
 
   function start() {
     const app = document.getElementById('app');
-    const themeBtn = h('button', { class: 'linklike theme-toggle', type: 'button', onclick: toggleTheme }, '');
+    const themeBtn = h('button', { class: 'theme-toggle', type: 'button', onclick: toggleTheme });
+    const SUN = '<svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></svg>';
+    const MOON = '<svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 1 1 9.8 3.5a6.7 6.7 0 0 0 10.7 10.7z"/></svg>';
     function paintTheme() {
       const light = document.documentElement.getAttribute('data-theme') === 'light';
-      themeBtn.textContent = light ? 'Dark mode' : 'Light mode';
+      // Show the icon of the mode you will switch to.
+      themeBtn.innerHTML = light ? MOON : SUN;
+      const label = light ? 'Switch to dark mode' : 'Switch to light mode';
+      themeBtn.setAttribute('aria-label', label);
+      themeBtn.setAttribute('title', label);
     }
     function toggleTheme() {
       const light = document.documentElement.getAttribute('data-theme') === 'light';
@@ -59,7 +65,7 @@
     paintTheme();
     backBtn = h('button', { class: 'linklike', type: 'button', onclick: () => go('home') }, '‹ Home');
     const bar = h('header', { class: 'bar glass' },
-      h('div', { class: 'bar-inner' }, backBtn, h('span', { class: 'bar-title' }, 'FCE Practice'), themeBtn));
+      h('div', { class: 'bar-inner' }, backBtn, h('span', { class: 'bar-title' }, h('span', { class: 'bar-name' }, 'FCE Practice'), h('span', { class: 'bar-by' }, 'by DSA')), themeBtn));
     screenEl = h('main', { class: 'screen', id: 'screen' });
     app.append(bar, screenEl);
     root.addEventListener('hashchange', render);

@@ -23,10 +23,26 @@
   gap: 12px;
   padding: 11px 20px;
 }
-.bar-title { font-weight: 700; letter-spacing: -0.01em; text-align: center; }
+.bar-title { display: flex; flex-direction: column; align-items: center; line-height: 1.15; text-align: center; }
+.bar-name { font-weight: 700; letter-spacing: -0.01em; }
+.bar-by { font-size: 11.5px; font-weight: 500; letter-spacing: 0.06em; color: var(--muted); }
 .bar .linklike { font-size: 15px; text-align: left; justify-self: start; }
-.bar .theme-toggle { justify-self: end; font-size: 14px; color: var(--muted); }
-.bar .theme-toggle:hover { color: var(--text); text-decoration: none; }
+.bar .theme-toggle {
+  justify-self: end;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg-strong);
+  box-shadow: var(--glass-edge);
+  color: var(--text);
+  transition: transform 0.2s var(--ease), border-color 0.2s;
+}
+.bar .theme-toggle:hover { border-color: var(--link); transform: rotate(18deg); }
+.bar .theme-toggle:active { transform: scale(0.92); }
 
 /* Feedback sheet after each answer: icon, text, action */
 .sheet {
