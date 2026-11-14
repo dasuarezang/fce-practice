@@ -15,12 +15,15 @@
 
 .mcard {
   position: relative;
-  background: var(--card);
-  border-radius: 14px;
+  background: var(--glass-bg-strong);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 18px;
   padding: 12px 14px;
   font-size: 15px;
   line-height: 1.3;
-  box-shadow: var(--shadow), inset 0 0 0 1.5px transparent;
+  box-shadow: var(--glass-edge), 0 2px 8px rgba(40, 60, 110, 0.1);
   cursor: pointer;
   user-select: none;
   overflow-wrap: anywhere;
@@ -28,10 +31,10 @@
 }
 .mcard.left { padding-right: 20px; }
 .mcard.right { padding-left: 20px; }
-.mcard.picked { box-shadow: var(--shadow), inset 0 0 0 2px var(--accent); }
-.mcard.linked { box-shadow: var(--shadow), inset 0 0 0 1.5px var(--accent); }
-.mcard.left.is-ok { box-shadow: var(--shadow), inset 0 0 0 2px var(--ok); }
-.mcard.left.is-bad { box-shadow: var(--shadow), inset 0 0 0 2px var(--bad); }
+.mcard.picked { border-color: var(--accent); box-shadow: var(--glass-edge), 0 0 0 2px var(--accent); }
+.mcard.linked { border-color: var(--accent); }
+.mcard.left.is-ok { border-color: var(--ok); box-shadow: var(--glass-edge), 0 0 0 2px var(--ok); }
+.mcard.left.is-bad { border-color: var(--bad); box-shadow: var(--glass-edge), 0 0 0 2px var(--bad); }
 
 .dot {
   position: absolute;

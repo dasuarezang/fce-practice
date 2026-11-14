@@ -38,7 +38,7 @@ Si necesitas un tipo de contenido nuevo, añade su generador de ejercicios en `j
 
 ```
 index.html
-css/      estilos (Liquid Glass solo en capas flotantes; sin degradados)
+css/      estilos (Liquid Glass sobre bloques de color planos; sin degradados)
 data/     un archivo por tema
 js/gen/   generadores de preguntas (puros, con pruebas)
 js/ui/    pantallas y ejercicios

@@ -31,7 +31,7 @@
           h('th', { scope: 'row' }, s.titulo, h('span', { class: 'muted small' }, ` · p. ${pages}`)),
           h('td', null, String(c.total)), h('td', null, String(c.worked)), h('td', { class: c.failed ? 'bad-text' : '' }, String(c.failed)));
       });
-      el.append(h('section', { class: 'card', style: 'margin-bottom:16px;overflow-x:auto' },
+      el.append(h('section', { class: 'card solid', style: 'margin-bottom:16px;overflow-x:auto' },
         h('h2', { class: 'title-l', style: 'margin-bottom:10px' }, tema.titulo),
         h('table', { class: 'cov-table' },
           h('thead', null, h('tr', null, h('th', null, 'Subtema'), h('th', null, 'Ítems'), h('th', null, 'Practicados'), h('th', null, 'Con fallos'))),

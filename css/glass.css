@@ -1,51 +1,52 @@
-/* Liquid Glass: only floating layers (top bar, sheets). Flat colours only. */
+/* Liquid Glass surfaces. Flat colours only; the edge light comes from layered inset shadows. */
 .glass {
   background: var(--glass-bg);
-  -webkit-backdrop-filter: saturate(180%) blur(22px);
-  backdrop-filter: saturate(180%) blur(22px);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
-  box-shadow: inset 0 1px 0 var(--glass-hi), 0 8px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--glass-edge), var(--glass-shadow);
 }
 
+/* Floating top bar */
 .bar {
   position: sticky;
-  top: 0;
+  top: 12px;
   z-index: 20;
-  border-width: 0 0 1px 0;
-  border-radius: 0;
-  box-shadow: none;
+  width: min(736px, calc(100% - 24px));
+  margin: 12px auto 0;
+  border-radius: 999px;
 }
 .bar-inner {
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 12px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  padding: 11px 20px;
 }
-.bar-title { font-weight: 700; letter-spacing: -0.01em; }
-.bar .linklike { font-size: 15px; min-width: 60px; text-align: left; }
-.bar .spacer { min-width: 60px; }
+.bar-title { font-weight: 700; letter-spacing: -0.02em; }
+.bar .linklike { font-size: 15px; min-width: 64px; text-align: left; }
+.bar .spacer { min-width: 64px; }
 
+/* Feedback sheet after each answer */
 .sheet {
   position: fixed;
   left: 50%;
-  bottom: 12px;
+  bottom: 14px;
   transform: translateX(-50%);
-  width: min(728px, calc(100% - 24px));
+  width: min(736px, calc(100% - 24px));
   z-index: 30;
-  border-radius: 24px;
-  padding: 18px 20px;
-  animation: sheet-in 0.3s var(--ease);
+  border-radius: 30px;
+  padding: 20px 22px;
+  background: var(--glass-bg-strong);
+  animation: sheet-in 0.4s var(--ease);
 }
 @keyframes sheet-in {
-  from { opacity: 0; transform: translate(-50%, 16px); }
-  to { opacity: 1; transform: translate(-50%, 0); }
+  from { opacity: 0; transform: translate(-50%, 24px) scale(0.97); }
+  to { opacity: 1; transform: translate(-50%, 0) scale(1); }
 }
 .sheet.ok { border-color: var(--ok); }
 .sheet.bad { border-color: var(--bad); }
-.sheet h4 { font-size: 17px; margin-bottom: 4px; }
+.sheet h4 { font-size: 18px; margin-bottom: 4px; }
 .sheet.ok h4 { color: var(--ok); }
 .sheet.bad h4 { color: var(--bad); }
-.sheet .explain { white-space: pre-line; margin-bottom: 12px; }
+.sheet .explain { white-space: pre-line; margin-bottom: 14px; }

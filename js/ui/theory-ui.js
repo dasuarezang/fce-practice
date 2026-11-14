@@ -21,7 +21,7 @@
           onclick: () => { const t = document.querySelector(`[data-section-id="${s.id}"]`); if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' }); },
         }, s.titulo)));
       body.replaceChildren();
-      for (const s of current.secciones) body.append(h('div', { class: 'card theory', html: FCE.theory.render(s) }));
+      for (const s of current.secciones) body.append(h('div', { class: 'card solid theory', html: FCE.theory.render(s) }));
     }
 
     el.append(h('h1', { class: 'title-l', style: 'margin-bottom:14px' }, 'Teoría'), tabs, h('div', { style: 'height:12px' }), toc, h('div', { style: 'height:18px' }), body);
