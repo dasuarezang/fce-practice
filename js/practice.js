@@ -22,12 +22,29 @@
       count[kind]++;
       assigned.get(kind).push(e);
     }
-    // A match group needs at least two items of a section: move a lone one to kahoot.
-    const matches = assigned.get('match');
+    // A match group needs at least two items of a section. For a lone one, pull a sibling that
+    // supports match into the group; if there is none, move the lone one to kahoot.
     const perSection = {};
-    for (const e of matches) perSection[e.section.id] = (perSection[e.section.id] || 0) + 1;
-    assigned.set('match', matches.filter((e) => perSection[e.section.id] > 1));
-    for (const e of matches) if (perSection[e.section.id] === 1) assigned.get('kahoot').push(e);
+    for (const e of assigned.get('match')) perSection[e.section.id] = (perSection[e.section.id] || 0) + 1;
+    for (const e of [...assigned.get('match')]) {
+      if (perSection[e.section.id] !== 1) continue;
+      let sibling = null;
+      for (const [kind, list] of assigned) {
+        if (kind === 'match') continue;
+        sibling = list.find((x) => x.section.id === e.section.id && FCE.gen.SUPPORT[x.section.tipo].includes('match'));
+        if (sibling) {
+          assigned.set(kind, list.filter((x) => x !== sibling));
+          break;
+        }
+      }
+      if (sibling) {
+        assigned.get('match').push(sibling);
+        perSection[e.section.id] = 2;
+      } else {
+        assigned.set('match', assigned.get('match').filter((x) => x !== e));
+        assigned.get('kahoot').push(e);
+      }
+    }
     return assigned;
   }
 

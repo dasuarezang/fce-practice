@@ -95,3 +95,11 @@ test('hyphens and spaces are interchangeable: "hard working", "hardworking", "Ba
   for (const a of ['hard-working', 'hard working', 'hardworking', 'Hard  Working.']) assert.ok(FCE.gen.matches(hw, a), a);
   assert.ok(!FCE.gen.matches(hw, 'hard'));
 });
+
+test('typing the notebook form with a slash is accepted when every part is a valid answer', () => {
+  const q = { answers: ['cleverer', 'more clever'] };
+  assert.ok(FCE.gen.matches(q, 'cleverer / more clever'));
+  assert.ok(FCE.gen.matches(q, 'more clever/cleverer'));
+  assert.ok(!FCE.gen.matches(q, 'cleverer / wrong'));
+  assert.ok(!FCE.gen.matches(q, '/'));
+});

@@ -41,7 +41,14 @@
     const n = norm(input);
     if (!n) return false;
     const key = (s) => norm(s).replace(/ /g, '');
-    return q.answers.some((a) => key(a) === key(n));
+    const answerKeys = q.answers.map(key);
+    if (answerKeys.includes(key(n))) return true;
+    // Notebook form "cleverer / more clever": every part must be a valid answer.
+    if (String(input).includes('/')) {
+      const parts = String(input).split('/').map(key).filter(Boolean);
+      return parts.length > 0 && parts.every((p) => answerKeys.includes(p));
+    }
+    return false;
   };
 
   // "{{so/as}} ... {{as}}" -> text with ___ and every combination of per-gap alternatives.

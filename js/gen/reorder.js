@@ -16,6 +16,16 @@
       }
       if (!words) continue;
       out.push({ kind: 'reorder', itemIds: [it.id], words, solution, explain: `${it.formula} — ${sentence}` });
+      if (section.tipo === 'estructura') {
+        // Second exercise: rebuild the structure itself from its tokens ("as + adjective + as").
+        const fsol = it.formula.split(/\s+/);
+        let fwords = null;
+        for (let attempt = 0; attempt < 30 && !fwords; attempt++) {
+          const w = rng.shuffle(fsol);
+          if (w.join(' ') !== fsol.join(' ')) fwords = w;
+        }
+        if (fwords) out.push({ kind: 'reorder', itemIds: [it.id], words: fwords, solution: fsol, explain: `${it.proposito}: ${it.formula}` });
+      }
     }
     return out;
   };

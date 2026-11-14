@@ -69,7 +69,7 @@
         message.textContent = 'Con esta selección no hay preguntas de ese tipo. Prueba con otro tipo.';
         return;
       }
-      FCE.app.go('practice', { questions, back: 'selector' });
+      FCE.app.go('practice', { questions });
     }
 
     el.append(h('h1', { class: 'title-l' }, 'Elige qué practicar'),

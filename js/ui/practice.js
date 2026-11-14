@@ -27,7 +27,7 @@
         FCE.app.go('results', { summary: session.summary(), questions });
         return;
       }
-      const pct = session.total() ? Math.round((session.index() / session.total()) * 100) : 0;
+      const pct = Math.round((Math.min(session.index(), questions.length) / questions.length) * 100);
       bar.style.width = pct + '%';
       counter.textContent = `${session.index() + 1} / ${session.total()}`;
       stage.replaceChildren();

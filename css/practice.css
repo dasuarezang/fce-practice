@@ -81,3 +81,5 @@
 .word-area.target.wrong .chip { background: var(--bad); color: #fff; }
 .chip[disabled] { cursor: default; }
 .actions { display: flex; gap: 12px; margin-top: 18px; }
+.chip { touch-action: none; user-select: none; }
+.chip.dragging { position: relative; z-index: 5; box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25); transition: none; }

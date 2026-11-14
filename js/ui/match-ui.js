@@ -95,11 +95,19 @@
           svg.append(hit, line);
         }
         if (drag) svg.append(...mkLine(drag.from, drag.to, 'live').slice(1));
+        const textOf = (list, id) => (list.find((x) => x.id === id) || {}).text || '';
         for (const [id, card] of leftCards) {
           card.classList.toggle('linked', links.has(id));
           card.classList.toggle('picked', selected === id);
+          card.setAttribute('aria-pressed', String(selected === id));
+          const to = links.get(id);
+          card.setAttribute('aria-label', textOf(q.left, id) + (to !== undefined ? ' — enlazado con ' + textOf(q.right, to) : ' — sin enlazar'));
         }
-        for (const [id, card] of rightCards) card.classList.toggle('linked', [...links.values()].includes(id));
+        for (const [id, card] of rightCards) {
+          const from = [...links].filter(([, r]) => r === id).map(([l]) => textOf(q.left, l));
+          card.classList.toggle('linked', from.length > 0);
+          card.setAttribute('aria-label', textOf(q.right, id) + (from.length ? ' — enlazado con ' + from.join(', ') : ''));
+        }
         btn.disabled = locked || links.size < q.left.length;
       }
 
@@ -141,9 +149,17 @@
         onAnswer([...verdict.values()].every(Boolean));
       }
 
-      const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(() => { if (board.isConnected) paint(); }) : null;
-      if (ro) ro.observe(board);
-      root.addEventListener('resize', () => { if (board.isConnected) paint(); });
+      let ro = null;
+      function onResize() {
+        if (!board.isConnected) { cleanup(); return; }
+        paint();
+      }
+      function cleanup() {
+        root.removeEventListener('resize', onResize);
+        if (ro) ro.disconnect();
+      }
+      if (typeof ResizeObserver !== 'undefined') { ro = new ResizeObserver(onResize); ro.observe(board); }
+      root.addEventListener('resize', onResize);
       paint();
     },
   };

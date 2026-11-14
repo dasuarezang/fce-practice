@@ -19,11 +19,14 @@ test('reorder words are a permutation of the solution and differ from it', () =>
   }
 });
 
-test('one question per expression, built from the first example sentence', () => {
+test('two questions per expression: the example sentence and the formula tokens', () => {
   const qs = run('t2-expressions');
-  assert.strictEqual(qs.length, 11);
-  const less = qs.find((q) => q.itemIds[0] === 't2-expr-less-least');
-  assert.strictEqual(less.solution.join(' '), 'This coat is less expensive than the other one.');
+  assert.strictEqual(qs.length, 22);
+  const less = qs.find((q) => q.itemIds[0] === 't2-expr-less-least' && q.solution.join(' ') === 'This coat is less expensive than the other one.');
+  assert.ok(less, 'first example sentence');
+  const formula = qs.find((q) => q.itemIds[0] === 't2-expr-by-far' && q.solution.join(' ') === 'by far + superlative');
+  assert.ok(formula, 'formula tokens for by-far');
+  assert.ok(formula.explain.includes('by far + superlative'));
 });
 
 test('reorder for pares returns []', () => {

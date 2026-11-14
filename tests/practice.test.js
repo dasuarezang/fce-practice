@@ -54,3 +54,14 @@ test('same seed gives the same build', () => {
   const b = FCE.practice.build({ sectionIds: ALL, kind: 'mixto', length: 20, seed: 9 });
   assert.deepStrictEqual(a, b);
 });
+
+test('mixto can form a match group in 2-item regla sections (it used to always fall back to kahoot)', () => {
+  let sawMatch = false;
+  for (let seed = 1; seed <= 40; seed++) {
+    const qs = FCE.practice.build({ sectionIds: ['t1-present-perfect'], kind: 'mixto', length: 'all', seed });
+    const covered = new Set(qs.flatMap((q) => q.itemIds));
+    assert.strictEqual(covered.size, 2, 'both items stay covered');
+    if (qs.some((q) => q.kind === 'match')) sawMatch = true;
+  }
+  assert.ok(sawMatch);
+});
