@@ -1,1 +1,43 @@
-/* theory styles: added in a later task */
+.theory h3 { font-size: 22px; margin-bottom: 14px; }
+.theory h4 { font-size: 17px; margin-bottom: 6px; }
+.theory { scroll-margin-top: 70px; }
+.t-section { scroll-margin-top: 70px; }
+
+.t-pairs { margin: 0; display: flex; flex-direction: column; }
+.t-pairs .t-row { display: grid; grid-template-columns: minmax(110px, 38%) 1fr; gap: 12px; padding: 9px 0; border-top: 1px solid var(--line); }
+.t-pairs .t-row:first-child { border-top: 0; }
+.t-pairs dt { font-weight: 600; }
+.t-pairs dd { margin: 0; color: var(--muted); }
+.t-anto dd::before { content: "↔ "; }
+
+.t-colloc { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 6px 16px; }
+.t-colloc li { padding: 6px 0; border-top: 1px solid var(--line); }
+.t-colloc strong { display: inline-block; min-width: 3.1em; }
+.t-colloc .verb-do { color: var(--k1); }
+.t-colloc .verb-make { color: var(--k3); }
+
+.t-table { width: 100%; border-collapse: collapse; font-size: 16px; }
+.t-table th, .t-table td { text-align: left; padding: 8px 8px 8px 0; }
+.t-table thead th { font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); border-bottom: 1px solid var(--line); }
+.t-table tbody td { border-top: 1px solid var(--line); }
+.t-table .t-nota th { padding-top: 16px; color: var(--accent); font-size: 14px; border: 0; }
+.t-table .t-nota:first-child th { padding-top: 6px; }
+
+.t-box { border-radius: 14px; padding: 16px; box-shadow: inset 0 0 0 1.5px var(--line); margin-bottom: 12px; }
+.t-box ul { margin: 8px 0 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; }
+.t-formula code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 15px; }
+.t-example { color: var(--muted); font-style: italic; margin-top: 6px; }
+
+.t-expr { padding: 14px 0; border-top: 1px solid var(--line); }
+.t-expr:first-of-type { border-top: 0; }
+.t-purpose { font-size: 14px; color: var(--muted); margin-bottom: 4px; }
+.t-expr mark, .t-box mark { background: var(--mark); color: var(--text); padding: 2px 6px; border-radius: 6px; font-weight: 600; }
+
+.pills.toc .pill { font-size: 14px; padding: 6px 12px; }
+
+.cov-table { width: 100%; border-collapse: collapse; font-size: 15px; min-width: 420px; }
+.cov-table th, .cov-table td { text-align: left; padding: 9px 10px 9px 0; border-top: 1px solid var(--line); }
+.cov-table thead th { border-top: 0; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+.cov-table td { font-variant-numeric: tabular-nums; }
+.bad-text { color: var(--bad); font-weight: 600; }
+.small { font-size: 13px; font-weight: 400; }
