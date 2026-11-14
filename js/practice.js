@@ -11,12 +11,23 @@
     return FCE.gen[kind](entries, FCE.gen.allEntries(), rng);
   }
 
+  // Kinds an item can really produce: its tipo's kinds, plus gap-fill / reorder for rules whose
+  // example sentence is complete (a rule without an example only supports kahoot and match).
+  function kindsOf(e) {
+    const kinds = FCE.gen.SUPPORT[e.section.tipo].slice();
+    if (e.section.tipo === 'regla') {
+      if (e.item.hueco) kinds.push('gapfill');
+      if (e.item.ejemplo && !e.item.ejemplo.includes('…')) kinds.push('reorder');
+    }
+    return kinds;
+  }
+
   // Mixto: each item gets one of its supported kinds, least-used first, so every kind shows up.
   function assignMixed(entries, rng) {
     const count = Object.fromEntries(KINDS.map((k) => [k, 0]));
     const assigned = new Map(KINDS.map((k) => [k, []]));
     for (const e of rng.shuffle(entries)) {
-      const options = FCE.gen.SUPPORT[e.section.tipo];
+      const options = kindsOf(e);
       const min = Math.min(...options.map((k) => count[k]));
       const kind = rng.pick(options.filter((k) => count[k] === min), 1)[0];
       count[kind]++;

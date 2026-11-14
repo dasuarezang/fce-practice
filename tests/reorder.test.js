@@ -34,6 +34,10 @@ test('reorder for pares returns []', () => {
   assert.deepStrictEqual(run('t1-do-make'), []);
 });
 
-test('regla items whose example has illegible words ("…") are skipped', () => {
-  assert.deepStrictEqual(run('t2-ed-ing'), []);
+test('regla examples are reordered, but an example with an illegible gap ("…") is skipped', () => {
+  const qs = run('t2-ed-ing');
+  assert.strictEqual(qs.length, 2);
+  assert.strictEqual(qs.find((q) => q.itemIds[0] === 't2-ed-ing-ed').solution.join(' '), 'I feel really EXCITED for Ocarina of Time Remake!');
+  const fixture = [{ item: { id: 'f', titulo: 'T', formula: 'f', puntos: ['p'], ejemplo: 'I feel … of Time!' }, section: { tipo: 'regla', id: 's' } }];
+  assert.deepStrictEqual(FCE.gen.reorder(fixture, [], FCE.rng.make(1)), []);
 });

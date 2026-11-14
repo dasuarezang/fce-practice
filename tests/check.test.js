@@ -12,7 +12,7 @@ test('check on real data has no failures and counts 99 items', () => {
   const r = check();
   assert.deepStrictEqual(r.errors, []);
   assert.strictEqual(r.count, 99);
-  assert.ok(r.warnings.length >= 5); // revisar items
+  assert.deepStrictEqual(r.warnings, []); // nothing left to confirm against the notebook
 });
 
 test('check on a fixture item supported by only one kind reports it', () => {

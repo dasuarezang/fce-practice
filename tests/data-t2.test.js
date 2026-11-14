@@ -38,10 +38,14 @@ test('tema 2 groups', () => {
   });
 });
 
-test('items doubtful in the notes carry revisar', () => {
-  for (const id of ['t2-ed-ing-ed', 't2-ed-ing-ing', 't2-expr-not-nearly', 't2-expr-one-of-the-most']) {
-    assert.ok(byId(id).revisar, id);
-  }
+test('the doubts about the notebook are resolved: nothing is flagged and the -ed/-ing examples are complete', () => {
+  assert.ok(!temas().flatMap(items).some((i) => i.revisar));
+  assert.strictEqual(byId('t2-ed-ing-ed').ejemplo, 'I feel really EXCITED for Ocarina of Time Remake!');
+  assert.strictEqual(byId('t2-ed-ing-ing').ejemplo, "Tomorrow's day will be really EXCITING, Ocarina of Time is launching!");
+  assert.ok(byId('t2-ed-ing-ed').hueco.includes('{{excited}}'));
+  assert.ok(byId('t2-ed-ing-ing').hueco.includes('{{exciting}}'));
+  assert.strictEqual(byId('t2-expr-one-of-the-most').formula, 'one of the most + superlative + infinitive');
+  assert.ok(byId('t2-expr-not-nearly').ejemplo.endsWith('we would wish.'));
 });
 
 test('every expression hueco contains at least one {{gap}} and its text matches ejemplo once unwrapped', () => {

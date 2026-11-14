@@ -142,6 +142,8 @@ Three or more syllables: more + adjective / most + adjective (experienced → mo
 
 ## 9. Puntos abiertos a confirmar contra el cuaderno
 
+> Resuelto por el usuario (2026-11-14): 1 = lie · 2 = «Ocarina» y «Ocarina of Time» · 3 = wish · 4 = infinitive (la fórmula de la estructura 9 pasa de `plural noun` a `infinitive`).
+
 1. T1: *make it up* = invent; **lie**.
 2. -ed/-ing: texto exacto de los dos ejemplos.
 3. Expression 7: última palabra de la frase de ejemplo ("wish"/"think").

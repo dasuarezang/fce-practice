@@ -65,3 +65,13 @@ test('mixto can form a match group in 2-item regla sections (it used to always f
   }
   assert.ok(sawMatch);
 });
+
+test('mixto can use gap-fill and reorder on the -ed/-ing rules now that their examples are complete', () => {
+  const kinds = new Set();
+  for (let seed = 1; seed <= 40; seed++) {
+    const qs = FCE.practice.build({ sectionIds: ['t2-ed-ing'], kind: 'mixto', length: 'all', seed });
+    assert.strictEqual(new Set(qs.flatMap((q) => q.itemIds)).size, 2, 'both items covered');
+    qs.forEach((q) => kinds.add(q.kind));
+  }
+  assert.ok(kinds.has('gapfill') && kinds.has('reorder'), [...kinds].join(','));
+});

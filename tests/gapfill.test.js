@@ -77,9 +77,13 @@ test('gap with alternatives (so/as) accepts either', () => {
   assert.ok(FCE.gen.matches(q, 'as as'));
 });
 
-test('regla without hueco produces no gapfill question', () => {
+test('regla without hueco produces no gapfill question; the -ed/-ing examples do', () => {
   assert.strictEqual(run('t1-present-perfect').length, 0);
-  assert.strictEqual(run('t2-ed-ing').length, 0);
+  const qs = run('t2-ed-ing');
+  assert.strictEqual(qs.length, 2);
+  assert.ok(FCE.gen.matches(qOf(qs, 't2-ed-ing-ed'), 'Excited'));
+  assert.ok(FCE.gen.matches(qOf(qs, 't2-ed-ing-ing'), 'exciting'));
+  assert.ok(!FCE.gen.matches(qOf(qs, 't2-ed-ing-ing'), 'excited'));
 });
 
 test('expression gaps accept every alternative the notes list (much/far/a lot/considerably, slightly/a bit/a little)', () => {

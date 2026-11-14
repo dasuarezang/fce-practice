@@ -22,7 +22,8 @@ test('tema 1 spot values from the notes', () => {
   assert.strictEqual(byId('t1-pp-simple').puntos.length, 4);
   assert.strictEqual(byId('t1-pp-continuous').formula, 'have + been + verb-ing');
   assert.strictEqual(byId('t1-anto-polite').negativo, 'impolite');
-  assert.ok(byId('t1-pv-make-it-up').revisar);
+  assert.strictEqual(byId('t1-pv-make-it-up').definicion, 'invent; lie');
+  assert.ok(!byId('t1-pv-make-it-up').revisar);
 });
 
 test('tema 1 groups: present perfect is gramatica, the rest vocabulario', () => {
