@@ -89,9 +89,21 @@
       paintTheme();
     }
     paintTheme();
+    const soundBtn = h('button', { class: 'theme-toggle sound-toggle', type: 'button', onclick: () => { FCE.sound.setEnabled(!FCE.sound.enabled()); paintSound(); if (FCE.sound.enabled()) FCE.sound.play('right'); } });
+    const ON = '<svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>';
+    const OFF = '<svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>';
+    function paintSound() {
+      const on = FCE.sound.enabled();
+      soundBtn.innerHTML = on ? ON : OFF;
+      const label = on ? 'Turn sounds off' : 'Turn sounds on';
+      soundBtn.setAttribute('aria-label', label);
+      soundBtn.setAttribute('title', label);
+      soundBtn.setAttribute('aria-pressed', String(on));
+    }
+    paintSound();
     backBtn = h('button', { class: 'linklike', type: 'button', onclick: () => go('home') }, '‹ Home');
     const bar = h('header', { class: 'bar glass' },
-      h('div', { class: 'bar-inner' }, backBtn, h('span', { class: 'bar-title' }, h('span', { class: 'bar-name' }, 'FCE Practice'), h('span', { class: 'bar-by' }, 'by DSA')), themeBtn));
+      h('div', { class: 'bar-inner' }, backBtn, h('span', { class: 'bar-title' }, h('span', { class: 'bar-name' }, 'FCE Practice'), h('span', { class: 'bar-by' }, 'by DSA')), h('span', { class: 'bar-tools' }, soundBtn, themeBtn)));
     screenEl = h('main', { class: 'screen', id: 'screen' });
     const foot = h('footer', { class: 'foot' },
       h('div', { class: 'foot-inner glass' },

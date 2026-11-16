@@ -71,6 +71,7 @@
         if (answered) return;
         answered = true;
         FCE.progress.record(q.itemIds, ok);
+        if (FCE.sound) FCE.sound.play(ok ? 'right' : 'wrong');
         session.submit(ok);
         const last = session.done();
         // Close the on-screen keyboard so the verdict is visible, and ignore the Enter that submitted

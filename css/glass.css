@@ -89,3 +89,8 @@
   .sheet { flex-wrap: wrap; }
   .sheet .btn { width: 100%; }
 }
+
+.bar-tools { justify-self: end; display: flex; gap: 8px; align-items: center; }
+.bar .sound-toggle { color: var(--muted); }
+.bar .sound-toggle[aria-pressed="true"] { color: var(--link); }
+.bar .sound-toggle:hover { transform: none; }

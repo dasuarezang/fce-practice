@@ -2,6 +2,7 @@
   const FCE = (root.FCE = root.FCE || {});
   const { h } = FCE.dom;
   const KEY = 'fce.lastResult';
+  const PASS = 60; // Cambridge First pass mark, in %
 
   // The last attempt survives a reload of #/results. The questions themselves cannot be rebuilt,
   // so only the numbers and the review lines are stored (no "Retry mistakes" after a reload).
@@ -17,6 +18,7 @@
 
   FCE.screens.results = function (el, params) {
     let data;
+    let fresh = false;
     if (params && params.summary) {
       const log = params.log || [];
       data = {
@@ -24,6 +26,7 @@
         rows: log.map(({ q, ok }) => ({ ok, text: q.explain || q.prompt || '' })),
       };
       remember(data);
+      fresh = true;
     } else {
       data = recall();
     }
@@ -37,10 +40,11 @@
     const pct = summary.total ? Math.round((summary.correct / summary.total) * 100) : 0;
     const wrong = new Set(summary.wrongItemIds);
     const failedQs = questions.filter((q) => q.itemIds.some((id) => wrong.has(id)));
+    if (fresh && FCE.sound) FCE.sound.play(pct >= PASS ? 'pass' : 'fail');
     const wrongCount = summary.total - summary.correct;
 
     const score = h('div', { class: 'stack', style: 'gap:8px' },
-      h('span', { class: 'eyebrow res-eyebrow' }, 'Your result'),
+      h('span', { class: 'eyebrow res-eyebrow' }, pct >= PASS ? 'Your result · passed' : 'Your result · not passed yet'),
       h('h1', { class: 'title-xl res-pct', 'data-pct': pct }, pct + '%'),
       h('p', { class: 'muted' }, `${summary.correct} of ${summary.total} right first time.`),
       h('div', { class: 'res-tally' },
