@@ -232,3 +232,5 @@ button:focus-visible, input:focus-visible, a:focus-visible, [tabindex]:focus-vis
   :root { --glass-bg: rgba(24, 31, 58, 0.86); --glass-bg-strong: rgba(30, 38, 70, 0.93); }
   :root[data-theme="light"] { --glass-bg: rgba(255, 255, 255, 0.86); --glass-bg-strong: rgba(255, 255, 255, 0.94); }
 }
+.foot-inner { flex-direction: column; justify-content: center; text-align: center; gap: 6px; }
+.foot-note { flex: 0 1 auto; max-width: 62ch; }
