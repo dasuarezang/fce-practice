@@ -66,3 +66,17 @@ test('when getItem throws but setItem works, progress still accumulates in memor
   s.record(['a'], true);
   assert.deepStrictEqual(s.stats('a'), { seen: 2, wrong: 1 });
 });
+
+test('weakIds: failed items stay weak until answered right twice in a row', () => {
+  const mem = { _d: {}, getItem(k) { return this._d[k] ?? null; }, setItem(k, v) { this._d[k] = v; } };
+  const s = FCE.store.create(mem);
+  s.record(['a'], false);
+  s.record(['b'], true);
+  assert.deepStrictEqual(s.weakIds(), ['a']);
+  s.record(['a'], true);
+  assert.deepStrictEqual(s.weakIds(), ['a']);
+  s.record(['a'], true);
+  assert.deepStrictEqual(s.weakIds(), []);
+  s.record(['a'], false);
+  assert.deepStrictEqual(s.weakIds(), ['a']);
+});

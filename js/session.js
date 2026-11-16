@@ -1,12 +1,12 @@
 (function (root) {
   const FCE = (root.FCE = root.FCE || {});
 
-  function create(questions) {
-    const queue = questions.map((q) => ({ q, retry: false }));
-    let pos = 0;
-    let originalCorrect = 0;
-    const wrong = [];
-    const log = []; // first attempt of every question, in order, for the results review
+  function create(questions, snap) {
+    const queue = snap ? snap.queue.map((x) => ({ q: x.q, retry: !!x.retry })) : questions.map((q) => ({ q, retry: false }));
+    let pos = snap ? snap.pos : 0;
+    let originalCorrect = snap ? snap.originalCorrect : 0;
+    const wrong = snap ? snap.wrong.slice() : [];
+    const log = snap ? snap.log.map((x) => ({ q: x.q, ok: !!x.ok })) : []; // first attempt of every question, for the results review
 
     function current() {
       return pos < queue.length ? queue[pos].q : null;
@@ -33,9 +33,11 @@
       submit,
       done: () => pos >= queue.length,
       log: () => log.slice(),
+      // Plain data (JSON-safe) to resume this session later.
+      snapshot: () => ({ questions, queue: queue.map((x) => ({ q: x.q, retry: x.retry })), pos, originalCorrect, wrong: wrong.slice(), log: log.map((x) => ({ q: x.q, ok: x.ok })) }),
       summary: () => ({ total: questions.length, correct: originalCorrect, wrongItemIds: wrong.slice() }),
     };
   }
 
-  FCE.session = { create };
+  FCE.session = { create, restore: (snap) => create(snap.questions, snap) };
 })(globalThis);

@@ -66,3 +66,18 @@ test('session log keeps the first attempt of every question, not the retries', (
   s.submit(true); // retry of a
   assert.deepStrictEqual(s.log().map((x) => [x.q.itemIds[0], x.ok]), [['a', false], ['b', true]]);
 });
+
+test('snapshot -> JSON -> restore continues exactly where the session was', () => {
+  const s = FCE.session.create([q('a'), q('b'), q('c')]);
+  s.submit(false);
+  s.submit(true);
+  const r = FCE.session.restore(JSON.parse(JSON.stringify(s.snapshot())));
+  assert.strictEqual(r.current().itemIds[0], 'c');
+  assert.strictEqual(r.total(), 4);
+  r.submit(true);
+  assert.strictEqual(r.current().itemIds[0], 'a'); // the retry of the failed one
+  r.submit(true);
+  assert.strictEqual(r.done(), true);
+  assert.deepStrictEqual(r.summary(), { total: 3, correct: 2, wrongItemIds: ['a'] });
+  assert.strictEqual(r.log().length, 3);
+});

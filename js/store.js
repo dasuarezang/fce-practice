@@ -1,6 +1,7 @@
 (function (root) {
   const FCE = (root.FCE = root.FCE || {});
   const KEY = 'fce.progress.v1';
+  const WEAK_RUN = 2;
 
   function defaultStorage() {
     try {
@@ -43,7 +44,8 @@
       const items = load();
       for (const id of itemIds) {
         const cur = items[id] && typeof items[id] === 'object' ? items[id] : { seen: 0, wrong: 0 };
-        items[id] = { seen: (cur.seen | 0) + 1, wrong: (cur.wrong | 0) + (ok ? 0 : 1) };
+        // run = right answers in a row since the last mistake (drives "weak items")
+        items[id] = { seen: (cur.seen | 0) + 1, wrong: (cur.wrong | 0) + (ok ? 0 : 1), run: ok ? (cur.run | 0) + 1 : 0 };
       }
       save(items);
     }
@@ -58,11 +60,17 @@
       return Object.keys(items).filter((id) => items[id] && items[id].wrong > 0);
     }
 
+    // Weak = failed at some point and not yet answered right twice in a row since.
+    function weakIds() {
+      const items = load();
+      return Object.keys(items).filter((id) => items[id] && items[id].wrong > 0 && (items[id].run | 0) < WEAK_RUN);
+    }
+
     function reset() {
       save({});
     }
 
-    return { record, stats, failedIds, reset };
+    return { record, stats, failedIds, weakIds, reset };
   }
 
   FCE.store = { create };

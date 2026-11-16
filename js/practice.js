@@ -61,7 +61,9 @@
 
   function build(opts) {
     const rng = FCE.rng.make(opts.seed === undefined ? Date.now() : opts.seed);
-    const entries = itemsOf(opts.sectionIds);
+    const entries = opts.itemIds
+      ? FCE.gen.allEntries().filter((e) => opts.itemIds.includes(e.item.id))
+      : itemsOf(opts.sectionIds);
     if (!entries.length) return [];
     let questions = [];
     if (opts.kind === 'mixto') {

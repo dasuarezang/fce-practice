@@ -83,3 +83,10 @@ test('teachEntries finds the structures a question is about, and nothing for oth
   assert.deepStrictEqual(E.practice.teachEntries({ itemIds: [structure.item.id] }).map((e) => e.item.id), [structure.item.id]);
   assert.deepStrictEqual(E.practice.teachEntries({ itemIds: [other.item.id] }), []);
 });
+
+test('build by itemIds only asks about those items', () => {
+  const ids = FCE.gen.allEntries().slice(0, 6).map((e) => e.item.id);
+  const qs = FCE.practice.build({ itemIds: ids, kind: 'mixto', length: 'all', seed: 3 });
+  assert.ok(qs.length > 0);
+  for (const q of qs) assert.ok(q.itemIds.every((id) => ids.includes(id)));
+});

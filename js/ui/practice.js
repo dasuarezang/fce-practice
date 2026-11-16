@@ -4,13 +4,14 @@
 
   // Practice flow: one question at a time, glass feedback sheet after each answer.
   FCE.screens.practice = function (el, params) {
-    const questions = (params && params.questions) || [];
+    const resume = params && params.resume;
+    const questions = resume ? resume.questions : (params && params.questions) || [];
     if (!questions.length) {
       FCE.app.replace('selector');
       return;
     }
     el.classList.add('has-dock');
-    const session = FCE.session.create(questions);
+    const session = resume ? FCE.session.restore(resume) : FCE.session.create(questions);
     const bar = h('i', { style: 'width:0%' });
     const counter = h('span', { class: 'muted' });
     const stage = h('div', { class: 'stage' });
@@ -41,6 +42,7 @@
       sheetHost.replaceChildren();
       const q = session.current();
       if (!q) {
+        FCE.saved.clear();
         FCE.app.go('results', { summary: session.summary(), log: session.log(), questions });
         return;
       }
@@ -73,6 +75,8 @@
         FCE.progress.record(q.itemIds, ok);
         if (FCE.sound) FCE.sound.play(ok ? 'right' : 'wrong');
         session.submit(ok);
+        if (session.done()) FCE.saved.clear();
+        else FCE.saved.save(session.snapshot());
         const last = session.done();
         // Close the on-screen keyboard so the verdict is visible, and ignore the Enter that submitted
         // the answer if it arrives again on the Next button.

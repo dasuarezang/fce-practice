@@ -32,6 +32,30 @@
           h('div', { class: 'progress', role: 'progressbar', 'aria-valuenow': pct, 'aria-valuemin': 0, 'aria-valuemax': 100 }, h('i', { style: `width:${pct}%` }))));
     }
 
+    // Unfinished practice, kept in this browser: resume or discard.
+    const saved = FCE.saved && FCE.saved.load();
+    if (saved) {
+      const banner = h('div', { class: 'card resume row', 'data-resume': '' },
+        h('div', { class: 'stack', style: 'gap:2px;flex:1;min-width:200px' },
+          h('span', { class: 'eyebrow' }, 'Unfinished practice'),
+          h('span', null, `You were on question ${saved.pos + 1} of ${saved.queue.length}.`)),
+        h('button', { class: 'btn', type: 'button', onclick: () => FCE.app.go('practice', { resume: saved }) }, 'Resume'),
+        h('button', { class: 'btn quiet', type: 'button', onclick: () => { FCE.saved.clear(); banner.remove(); } }, 'Discard'));
+      el.append(banner);
+    }
+
+    // Practise what is still weak: failed items not yet answered right twice in a row.
+    const weak = FCE.progress.weakIds();
+    const weakBtn = weak.length
+      ? h('button', {
+          class: 'btn secondary weak-btn', type: 'button', 'data-weak': String(weak.length),
+          onclick: () => {
+            const questions = FCE.practice.build({ itemIds: weak, kind: 'mixto', length: 20 });
+            if (questions.length) FCE.app.go('practice', { questions });
+          },
+        }, `Practise my weak items (${weak.length})`)
+      : null;
+
     el.append(
       h('div', { class: 'home-choice' },
         h('button', { class: 'choice card', type: 'button', 'data-go': 'theory', onclick: () => FCE.app.go('theory') },
@@ -45,7 +69,7 @@
             h('span', { class: 'choice-title' }, 'Practice'),
             h('span', { class: 'muted' }, 'Choose subtopics and the type of exercise.'),
             h('span', { class: 'choice-go', 'aria-hidden': 'true' }, '→')),
-          progress)),
+          progress, weakBtn)),
       h('p', { style: 'margin-top:28px' },
         h('button', { class: 'linklike', type: 'button', onclick: () => FCE.app.go('coverage') }, 'View coverage of the syllabus')));
   };
