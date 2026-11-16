@@ -2,31 +2,42 @@
   const FCE = (root.FCE = root.FCE || {});
   const { h } = FCE.dom;
 
-  // Theory: tema tabs on top, section menu on the left (a row of pills on phones), notes on the right.
+  const GROUPS = [
+    ['vocabulario', 'Vocabulary'],
+    ['gramatica', 'Grammar'],
+    ['expressions', 'Expressions'],
+  ];
+
+  // Theory: every unit on one page, in notebook order (vocabulary, grammar, expressions).
+  // Left: an index of units and sections (a wrapped row on phones). Right: the notes.
   FCE.screens.theory = function (el, params) {
     el.classList.add('wide');
-    let current = FCE.temas.find((t) => t.id === (params && params.temaId)) || FCE.temas[0];
-    const tabs = h('div', { class: 'pills', role: 'tablist' });
-    const nav = h('nav', { class: 'th-nav', 'aria-label': 'Sections' });
+    const nav = h('nav', { class: 'th-nav', 'aria-label': 'Contents' });
     const body = h('div', { class: 'stack th-body' });
+    const jump = (id) => {
+      const t = document.getElementById(id);
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
 
-    function paint() {
-      tabs.replaceChildren(...FCE.temas.map((t) =>
-        h('button', {
-          class: 'pill' + (t === current ? ' on' : ''), type: 'button', role: 'tab', 'aria-selected': String(t === current),
-          onclick: () => { current = t; paint(); },
-        }, t.titulo)));
-      nav.replaceChildren(...current.secciones.map((s) =>
-        h('button', {
-          class: 'th-link', type: 'button',
-          onclick: () => { const t = document.querySelector(`[data-section-id="${s.id}"]`); if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' }); },
-        }, s.titulo)));
-      body.replaceChildren();
-      for (const s of current.secciones) body.append(h('div', { class: 'card solid theory', html: FCE.theory.render(s) }));
+    for (const tema of FCE.temas) {
+      nav.append(h('button', { class: 'th-unit', type: 'button', onclick: () => jump('th-' + tema.id) }, tema.titulo));
+      const unit = h('section', { class: 'th-tema stack', id: 'th-' + tema.id },
+        h('h2', { class: 'title-l th-tema-title' }, tema.titulo));
+      for (const [grupo, label] of GROUPS) {
+        const secs = tema.secciones.filter((s) => s.grupo === grupo);
+        if (!secs.length) continue;
+        unit.append(h('span', { class: 'eyebrow th-group' }, label));
+        for (const s of secs) {
+          nav.append(h('button', { class: 'th-link', type: 'button', onclick: () => jump('sec-' + s.id) }, s.titulo));
+          unit.append(h('div', { class: 'card solid theory', id: 'sec-' + s.id, html: FCE.theory.render(s) }));
+        }
+      }
+      body.append(unit);
     }
 
-    el.append(h('h1', { class: 'title-l', style: 'margin-bottom:14px' }, 'Theory'), tabs,
+    el.append(h('h1', { class: 'title-l', style: 'margin-bottom:6px' }, 'Theory'),
+      h('p', { class: 'muted', style: 'margin-bottom:18px' }, 'Your class notes, complete and in order.'),
       h('div', { class: 'th-layout' }, nav, body));
-    paint();
+    if (params && params.temaId) setTimeout(() => jump('th-' + params.temaId), 0);
   };
 })(globalThis);

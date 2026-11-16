@@ -38,8 +38,34 @@
       FCE.screens[screen](screenEl, state.params);
     } catch (err) {
       console.error(err);
-      screenEl.append(h('p', { class: 'muted' }, 'No se pudo mostrar esta pantalla.'));
+      screenEl.append(h('p', { class: 'muted' }, 'This screen could not be shown.'));
     }
+  }
+
+  // The coloured blocks are sized once from the screen, not from the window: scrolling, the mobile
+  // address bar or resizing the window never moves or rescales them. Only a rotation re-measures.
+  function pinBackground() {
+    let bw = 0;
+    let bh = 0;
+    const set = () => {
+      const s = root.screen || {};
+      const long = Math.max(s.width || 0, s.height || 0);
+      const short = Math.min(s.width || 0, s.height || 0);
+      const portrait = root.innerHeight > root.innerWidth;
+      const rs = document.documentElement.style;
+      // never smaller than the window itself (e.g. browser zoomed out)
+      bw = Math.max(portrait ? short : long, root.innerWidth);
+      bh = Math.max(portrait ? long : short, root.innerHeight);
+      rs.setProperty('--bw', bw + 'px');
+      rs.setProperty('--bh', bh + 'px');
+    };
+    set();
+    let wasPortrait = root.innerHeight > root.innerWidth;
+    root.addEventListener('resize', () => {
+      const p = root.innerHeight > root.innerWidth;
+      // Re-measure only on rotation, or if the window grows past the layer (it never shrinks the blocks).
+      if (p !== wasPortrait || root.innerWidth > bw || root.innerHeight > bh) { wasPortrait = p; set(); }
+    });
   }
 
   function start() {
@@ -67,7 +93,12 @@
     const bar = h('header', { class: 'bar glass' },
       h('div', { class: 'bar-inner' }, backBtn, h('span', { class: 'bar-title' }, h('span', { class: 'bar-name' }, 'FCE Practice'), h('span', { class: 'bar-by' }, 'by DSA')), themeBtn));
     screenEl = h('main', { class: 'screen', id: 'screen' });
-    app.append(bar, screenEl);
+    const foot = h('footer', { class: 'foot' },
+      h('div', { class: 'foot-inner glass' },
+        h('p', { class: 'foot-note' }, 'Independent, non-profit study resource based on personal class notes. Not affiliated with or endorsed by Cambridge University Press & Assessment.'),
+        h('p', { class: 'foot-by' }, 'by DSA')));
+    app.append(bar, screenEl, foot);
+    pinBackground();
     root.addEventListener('hashchange', render);
     render();
   }

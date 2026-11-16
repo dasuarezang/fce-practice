@@ -9,6 +9,7 @@
       FCE.app.replace('selector');
       return;
     }
+    el.classList.add('has-dock');
     const session = FCE.session.create(questions);
     const bar = h('i', { style: 'width:0%' });
     const counter = h('span', { class: 'muted' });
@@ -20,13 +21,42 @@
         h('div', { class: 'progress' }, bar)),
       stage, sheetHost);
 
+    const taught = new Set();
+
+    // A structure is explained once, before the first question that uses it.
+    function teach(entries, then) {
+      stage.replaceChildren(
+        h('div', { class: 'card solid teach' },
+          h('span', { class: 'eyebrow' }, entries.length > 1 ? 'Before you answer · structures' : 'Before you answer · structure'),
+          entries.map(({ item }) =>
+            h('article', { class: 't-expr' },
+              h('p', { class: 't-purpose' }, item.proposito),
+              h('p', { class: 't-formula' }, h('mark', null, item.formula)),
+              h('p', { class: 't-example' }, item.ejemplo.split(' / ').join('\n')))),
+          h('div', { class: 'actions' }, h('button', { class: 'btn', type: 'button', onclick: then }, 'Got it'))));
+      root.scrollTo(0, 0);
+    }
+
     function show() {
       sheetHost.replaceChildren();
       const q = session.current();
       if (!q) {
-        FCE.app.go('results', { summary: session.summary(), questions });
+        FCE.app.go('results', { summary: session.summary(), log: session.log(), questions });
         return;
       }
+      const fresh = FCE.practice.teachEntries(q).filter((e) => !taught.has(e.item.id));
+      if (fresh.length) {
+        fresh.forEach((e) => taught.add(e.item.id));
+        counter.textContent = `${session.index() + 1} / ${session.total()}`;
+        teach(fresh, ask);
+        return;
+      }
+      ask();
+    }
+
+    function ask() {
+      sheetHost.replaceChildren();
+      const q = session.current();
       const pct = Math.round((Math.min(session.index(), questions.length) / questions.length) * 100);
       bar.style.width = pct + '%';
       counter.textContent = `${session.index() + 1} / ${session.total()}`;
@@ -43,13 +73,17 @@
         FCE.progress.record(q.itemIds, ok);
         session.submit(ok);
         const last = session.done();
-        const next = h('button', { class: 'btn', type: 'button', autofocus: true, onclick: show }, last ? 'See results' : 'Next');
+        // Close the on-screen keyboard so the verdict is visible, and ignore the Enter that submitted
+        // the answer if it arrives again on the Next button.
+        if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+        const shownAt = Date.now();
+        const next = h('button', { class: 'btn', type: 'button', onclick: () => { if (Date.now() - shownAt > 400) show(); } }, last ? 'See results' : 'Next');
         sheetHost.replaceChildren(
           h('div', { class: 'sheet glass ' + (ok ? 'ok' : 'bad'), role: 'status' },
             h('span', { class: 'sheet-icon', 'aria-hidden': 'true' }, ok ? '✓' : '✕'),
             h('div', { class: 'sheet-body' }, h('h4', null, ok ? 'Correct' : 'Not quite'), h('p', { class: 'explain' }, q.explain || '')),
             next));
-        next.focus();
+        if (!(root.matchMedia && root.matchMedia('(pointer: coarse)').matches)) next.focus();
       });
     }
     show();

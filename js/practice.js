@@ -79,5 +79,12 @@
     return KINDS.filter((k) => generate(k, entries, rng).length > 0);
   }
 
-  FCE.practice = { build, itemsOf, kindsFor, KINDS };
+  // A structure (Comparison expressions) must be explained before it is asked: the structure entries
+  // a question is about (empty when it is not about any).
+  function teachEntries(q) {
+    const ids = new Set(q.itemIds);
+    return FCE.gen.allEntries().filter((e) => e.section.tipo === 'estructura' && ids.has(e.item.id));
+  }
+
+  FCE.practice = { build, itemsOf, kindsFor, teachEntries, KINDS };
 })(globalThis);

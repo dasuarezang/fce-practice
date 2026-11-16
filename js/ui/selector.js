@@ -12,7 +12,7 @@
 
   // Selector: subtopic tiles on the left, a sticky "Your practice" panel on the right (bottom bar on phones).
   FCE.screens.selector = function (el, params) {
-    el.classList.add('wide');
+    el.classList.add('wide', 'has-dock');
     const temas = FCE.temas;
     const allIds = (t) => t.secciones.map((s) => s.id);
     const selected = new Set();

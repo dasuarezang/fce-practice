@@ -75,3 +75,11 @@ test('mixto can use gap-fill and reorder on the -ed/-ing rules now that their ex
   }
   assert.ok(kinds.has('gapfill') && kinds.has('reorder'), [...kinds].join(','));
 });
+
+test('teachEntries finds the structures a question is about, and nothing for other kinds', () => {
+  const E = require('../data/index.js') && globalThis.FCE;
+  const structure = E.gen.allEntries().find((e) => e.section.tipo === 'estructura');
+  const other = E.gen.allEntries().find((e) => e.section.tipo === 'pares');
+  assert.deepStrictEqual(E.practice.teachEntries({ itemIds: [structure.item.id] }).map((e) => e.item.id), [structure.item.id]);
+  assert.deepStrictEqual(E.practice.teachEntries({ itemIds: [other.item.id] }), []);
+});

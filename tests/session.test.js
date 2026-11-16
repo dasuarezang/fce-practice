@@ -58,3 +58,11 @@ test('index counts answered questions', () => {
   s.submit(true);
   assert.strictEqual(s.index(), 1);
 });
+
+test('session log keeps the first attempt of every question, not the retries', () => {
+  const s = FCE.session.create([q('a'), q('b')]);
+  s.submit(false);
+  s.submit(true);
+  s.submit(true); // retry of a
+  assert.deepStrictEqual(s.log().map((x) => [x.q.itemIds[0], x.ok]), [['a', false], ['b', true]]);
+});

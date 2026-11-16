@@ -52,3 +52,12 @@
   .th-layout { grid-template-columns: 1fr; }
   .th-nav { position: static; flex-direction: row; flex-wrap: wrap; padding: 6px; }
 }
+
+.th-tema { gap: 16px; scroll-margin-top: 84px; margin-bottom: 18px; }
+.th-tema-title { padding-bottom: 10px; border-bottom: 2px solid var(--line); }
+.th-group { margin-top: 6px; }
+.th-unit { text-align: left; border: 0; background: transparent; color: var(--link); padding: 10px 12px 4px; font-size: 12px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; }
+.th-unit:not(:first-child) { margin-top: 8px; }
+.theory, .th-tema { scroll-margin-top: 84px; }
+.t-example { white-space: pre-line; }
+@media (max-width: 900px) { .th-unit { flex: 1 0 100%; padding: 8px 8px 2px; } }

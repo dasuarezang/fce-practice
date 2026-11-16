@@ -14,6 +14,7 @@
       function finish(ok) {
         locked = true;
         inputs.forEach((i) => { i.disabled = true; i.classList.add(ok ? 'right' : 'wrong'); });
+        if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
         onAnswer(ok);
       }
 
@@ -46,7 +47,7 @@
         line.append(p);
         if (i < parts.length - 1) {
           const input = h('input', {
-            class: 'gap-input', type: 'text', autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false',
+            class: 'gap-input', type: 'text', autocomplete: 'off', autocapitalize: 'off', autocorrect: 'off', spellcheck: 'false', enterkeyhint: 'done',
             'aria-label': `Blank ${i + 1}`,
             onkeydown: (e) => { if (e.key === 'Enter') check(); },
           });

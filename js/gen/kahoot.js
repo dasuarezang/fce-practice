@@ -31,6 +31,20 @@
     return { kind: 'kahoot', itemIds: [entry.item.id], prompt, options, answer: options.indexOf(correct), explain };
   }
 
+  // Wrong-but-tempting forms for a comparative/superlative question.
+  gen.formTraps = function (it, comp) {
+    const parts = (v) => v.split('/').map((x) => x.trim()).filter(Boolean);
+    const right = new Set(parts(comp ? it.comparativo : it.superlativo));
+    const traps = [parts(comp ? it.superlativo : it.comparativo)[0]];
+    // Two-syllable adjectives accept both patterns, so a pattern trap there could be right.
+    if (it.nota !== 'two syllables') {
+      traps.push(it.nota === 'three or more syllables'
+        ? it.base + (comp ? 'er' : 'est') // inconvenient -> inconvenientest
+        : (comp ? 'more ' : 'most ') + it.base); // high -> most high, bad -> most bad
+    }
+    return traps.filter((t, i) => t && !right.has(t) && traps.indexOf(t) === i);
+  };
+
   function build(entry, pool, rng) {
     const it = entry.item;
     switch (entry.section.tipo) {
@@ -56,8 +70,12 @@
       case 'tabla': {
         const comp = rng.next() < 0.5;
         const field = comp ? 'comparativo' : 'superlativo';
+        const groups = candidates(entry, pool, (i) => i[field], (i) => i.base);
+        // Traps first, so the answer cannot be found by logic alone: the other degree of the same
+        // adjective (worse when asked for the superlative of "bad") and the regular-pattern mistake.
+        groups.unshift(gen.formTraps(it, comp).map((text) => ({ text })));
         return assemble(entry, rng, `${comp ? 'Comparative' : 'Superlative'} of “${it.base}”`, it[field],
-          candidates(entry, pool, (i) => i[field], (i) => i.base), `${it.base} → ${it.comparativo} → ${it.superlativo}`);
+          groups, `${it.base} → ${it.comparativo} → ${it.superlativo}`);
       }
       case 'regla': {
         const punto = rng.pick(it.puntos, 1)[0];

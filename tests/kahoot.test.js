@@ -113,3 +113,27 @@ test('estructura also asks by purpose, and shared purposes never leak into the o
   }
   assert.ok(byPurpose > 0, 'purpose-based prompt never generated');
 });
+
+test('tabla questions always carry the other degree of the same adjective as a trap', () => {
+  const entries = ofSection('t2-irregulares');
+  for (let seed = 1; seed <= 20; seed++) {
+    for (const q of FCE.gen.kahoot(entries, pool('tabla'), FCE.rng.make(seed))) {
+      const it = entries.find((e) => e.item.id === q.itemIds[0]).item;
+      const comp = q.prompt.startsWith('Comparative');
+      const trap = (comp ? it.superlativo : it.comparativo).split('/')[0].trim();
+      assert.ok(q.options.includes(trap), `${q.prompt}: ${q.options}`);
+      assert.strictEqual(new Set(q.options).size, q.options.length);
+    }
+  }
+});
+
+test('bad: asking the superlative offers "worse" among the options', () => {
+  const entries = ofSection('t2-irregulares');
+  let seen = false;
+  for (let seed = 1; seed <= 40; seed++) {
+    for (const q of FCE.gen.kahoot(entries, pool('tabla'), FCE.rng.make(seed))) {
+      if (q.prompt === 'Superlative of “bad”') { seen = true; assert.ok(q.options.includes('worse')); }
+    }
+  }
+  assert.ok(seen);
+});
