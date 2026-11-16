@@ -108,7 +108,10 @@
     const foot = h('footer', { class: 'foot' },
       h('div', { class: 'foot-inner glass' },
         h('p', { class: 'foot-note' }, 'Independent, non-profit study resource based on personal class notes. Not affiliated with or endorsed by Cambridge University Press & Assessment.'),
-        h('p', { class: 'foot-by' }, 'by DSA')));
+        h('p', { class: 'foot-links' },
+          h('button', { class: 'linklike', type: 'button', onclick: () => go('help') }, 'How it works'),
+          h('span', { 'aria-hidden': 'true' }, '·'),
+          h('a', { class: 'foot-by', href: 'https://dasuarezang.github.io/', target: '_blank', rel: 'noopener noreferrer', 'aria-label': 'by DSA (opens my CV website in a new tab)' }, 'by DSA'))));
     app.append(bar, screenEl, foot);
     pinBackground();
     root.addEventListener('hashchange', render);
