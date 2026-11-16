@@ -76,7 +76,8 @@
       }
 
       el.append(
-        h('p', { class: 'muted', style: 'margin-bottom:12px' }, 'Put the words in order to form the sentence.'),
+        q.purpose ? h('div', { class: 'purpose' }, h('span', { class: 'eyebrow' }, 'What this structure is for'), h('p', { class: 'prompt-purpose' }, q.purpose)) : null,
+        h('p', { class: 'muted', style: 'margin-bottom:12px' }, q.formulaOnly ? 'Put the pieces in order to build the structure.' : 'Put the words in order to form the sentence.'),
         target, pool, h('div', { class: 'actions' }, btn));
     },
   };
