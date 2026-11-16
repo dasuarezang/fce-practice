@@ -121,3 +121,5 @@ button.choice .choice-go { top: 24px; right: 26px; }
 .exam-note { font-size: 14px; margin-top: 8px; min-height: 1.2em; }
 
 .home-tools { margin-top: 20px; }
+.home-tools { flex-wrap: nowrap; }
+.home-tools .btn { flex: 1 1 0; min-width: 0; text-align: center; }
