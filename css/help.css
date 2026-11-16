@@ -1,0 +1,93 @@
+/* How it works: every card has a tone from the site palette (--k1 blue, --k2 green, --k3 orange, --k4 purple). Flat colours only. */
+.tone-1 { --tone: var(--k1); }
+.tone-2 { --tone: var(--k2); }
+.tone-3 { --tone: var(--k3); }
+.tone-4 { --tone: var(--k4); }
+.help-sub { margin: 34px 0 14px; }
+.title-m { font-size: 22px; font-weight: 700; }
+.kicker { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tone, var(--link)); margin-bottom: 6px; }
+
+/* Cards with a colour bar and a tinted icon */
+.help-card, .install { position: relative; overflow: hidden; border-top: 4px solid var(--tone); }
+.help-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.help-card { padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 14px; }
+.help-top { display: flex; align-items: center; gap: 12px; }
+.help-title { font-size: 20px; }
+.help-ico { flex: none; width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; color: var(--tone); background: color-mix(in srgb, var(--tone) 18%, transparent); }
+.help-ico svg { width: 22px; height: 22px; }
+.help-text { font-size: 16px; line-height: 1.55; }
+
+/* Mini pictures */
+.hv { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 14px; border-radius: 14px; background: color-mix(in srgb, var(--tone) 11%, transparent); border: 1px solid color-mix(in srgb, var(--tone) 28%, transparent); font-size: 14px; min-height: 64px; }
+.hv-chip { padding: 5px 12px; border-radius: 999px; font-weight: 600; font-size: 13px; background: var(--glass-bg-strong); border: 1px solid var(--glass-border); }
+.hv-chip.c1 { color: var(--k1); } .hv-chip.c2 { color: var(--k2); } .hv-chip.c3 { color: var(--k3); } .hv-chip.c4 { color: var(--k4); }
+.hv-lines { flex-direction: column; align-items: stretch; gap: 7px; }
+.hv-lines i { display: block; height: 7px; border-radius: 4px; background: color-mix(in srgb, var(--tone) 45%, transparent); }
+.hv-lines i:nth-child(1) { width: 46%; background: var(--tone); height: 9px; } .hv-lines i:nth-child(2) { width: 100%; } .hv-lines i:nth-child(3) { width: 88%; } .hv-lines i:nth-child(4) { width: 64%; }
+.hv-answer { gap: 10px 14px; }
+.hv-opts { display: flex; gap: 6px; }
+.hv-opt { width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; font-weight: 700; font-size: 13px; color: #06101f; }
+.hv-opt.c1 { background: var(--k1); } .hv-opt.c2 { background: var(--k2); } .hv-opt.c3 { background: var(--k3); } .hv-opt.c4 { background: var(--k4); }
+.hv-gap { display: inline-block; min-width: 34px; text-align: center; border-bottom: 2px solid var(--tone); color: var(--tone); }
+.hv-pair { display: flex; align-items: center; }
+.hv-pill { width: 34px; height: 22px; border-radius: 7px; background: var(--glass-bg-strong); border: 1px solid var(--glass-border); display: grid; place-items: center; }
+.hv-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--tone); }
+.hv-link { width: 30px; height: 2px; background: var(--tone); }
+.hv-stats { justify-content: space-between; }
+.hv-stat { display: flex; flex-direction: column; font-size: 12px; color: var(--muted); }
+.hv-stat b { font-size: 22px; color: var(--tone); line-height: 1.1; }
+.hv-arrow { color: var(--tone); font-weight: 700; }
+.hv-fc { padding: 8px 14px; border-radius: 10px; background: var(--glass-bg-strong); border: 1px solid var(--glass-border); font-weight: 600; }
+.hv-fc.back { border-color: var(--tone); color: var(--tone); }
+.hv-ok, .hv-no { padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+.hv-ok { background: var(--ok-bg); color: var(--ok); } .hv-no { background: var(--bad-bg); color: var(--bad); }
+.hv-dotrow { display: inline-flex; gap: 5px; align-items: center; }
+.hv-dotrow i { width: 14px; height: 14px; border-radius: 50%; }
+.hv-dotrow i.x { background: var(--bad); } .hv-dotrow i.y { background: var(--ok); }
+.hv-dotrow b { font-size: 12px; color: var(--ok); margin-left: 4px; }
+.hv-bars { flex-direction: column; align-items: stretch; gap: 8px; }
+.hv-bar { display: block; height: 10px; border-radius: 5px; background: color-mix(in srgb, var(--tone) 22%, transparent); }
+.hv-bar i { display: block; height: 100%; border-radius: 5px; background: var(--tone); }
+.hv-resume { justify-content: space-between; }
+.hv-resume b { padding: 5px 12px; border-radius: 999px; background: var(--accent); color: var(--accent-text); font-size: 13px; }
+.hv-tools { gap: 10px; }
+.hv-tool { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; font-size: 17px; color: var(--tone); background: var(--glass-bg-strong); border: 1px solid var(--glass-border); }
+.hv-sync { justify-content: center; gap: 14px; }
+.hv-node { padding: 8px 14px; border-radius: 10px; font-weight: 600; background: var(--glass-bg-strong); border: 1px solid var(--glass-border); }
+.hv-node.on { border-color: var(--tone); color: var(--tone); }
+
+/* Install guide */
+.install { padding: 26px; margin-bottom: 6px; }
+.install-head { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
+.seg { display: inline-flex; align-self: flex-start; gap: 4px; margin-top: 12px; padding: 4px; border-radius: 999px; background: var(--line); }
+.seg-btn { border: 0; background: transparent; padding: 8px 18px; border-radius: 999px; font-weight: 700; font-size: 15px; color: var(--muted); }
+.seg-btn[aria-selected="true"] { background: var(--tone); color: #06101f; }
+.install-note { font-size: 15px; margin-bottom: 16px; }
+.steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.step { display: grid; grid-template-columns: 40px minmax(0, 1fr) 100px; gap: 16px; align-items: center; padding: 16px; border-radius: var(--radius-s); background: color-mix(in srgb, var(--tone) 9%, transparent); border: 1px solid color-mix(in srgb, var(--tone) 26%, transparent); }
+.step-n { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 18px; background: var(--tone); color: #06101f; }
+.step-text h3 { font-size: 18px; margin-bottom: 4px; }
+.step-text p { font-size: 15.5px; line-height: 1.5; }
+.step-art svg { width: 100px; height: auto; display: block; }
+.ph-body { fill: var(--card); stroke: var(--muted); stroke-width: 3; }
+.ph-screen { fill: var(--bg); }
+.ph-line { fill: var(--line); }
+.ph-bar, .ph-sheet { fill: var(--glass-bg-strong); stroke: var(--line); stroke-width: 1.5; }
+.ph-hot { fill: var(--tone); }
+.ph-on { fill: #06101f; opacity: 0.55; }
+.ph-dot { fill: #06101f; }
+.ph-icon { fill: var(--tone); }
+.ph-letter { fill: #06101f; font: 800 7px/1 system-ui, sans-serif; }
+.ph-hotline { fill: none; stroke: var(--tone); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.tips { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); }
+.tips h3 { font-size: 16px; margin-bottom: 8px; color: var(--tone); }
+.tips ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 15.5px; }
+
+@media (max-width: 760px) {
+  .help-grid { grid-template-columns: 1fr; }
+  .install { padding: 20px 16px; }
+  .step { grid-template-columns: 34px minmax(0, 1fr); gap: 12px; padding: 14px; }
+  .step-n { width: 34px; height: 34px; font-size: 16px; align-self: start; }
+  .step-art { grid-column: 2; }
+  .step-art svg { width: 84px; }
+}

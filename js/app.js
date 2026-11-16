@@ -116,7 +116,11 @@
     pinBackground();
     root.addEventListener('hashchange', render);
     if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
-      navigator.serviceWorker.register('sw.js').catch(() => { /* no offline mode; the web still works */ });
+      // updateViaCache:'none' makes the browser fetch sw.js fresh, and update() looks for a new one every time the app is opened or comes back to the front.
+      navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then((reg) => {
+        reg.update().catch(() => {});
+        document.addEventListener('visibilitychange', () => { if (!document.hidden) reg.update().catch(() => {}); });
+      }).catch(() => { /* no offline mode; the web still works */ });
     }
     render();
   }

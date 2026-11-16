@@ -14,6 +14,21 @@ async function precache() {
   await Promise.all(shell.map((url) => fetch(url, { cache: 'no-cache' }).then((r) => (r.ok ? cache.put(url, r) : null)).catch(() => null)));
 }
 
+// After any visit to the page, bring the offline copy in line with the live site: fetch every file index.html
+// references now and drop the cached ones it no longer uses. Nothing is deleted unless every download worked.
+async function refresh(html) {
+  const cache = await caches.open(CACHE);
+  const urls = [...html.matchAll(/(?:src|href)="((?:js|css|data)\/[^"]+)"/g)].map((m) => m[1]);
+  const fresh = await Promise.all(urls.map((u) => fetch(u, { cache: 'no-cache' }).then((r) => (r.ok ? r : null)).catch(() => null)));
+  if (fresh.some((r) => !r)) return;
+  await Promise.all(fresh.map((r, i) => cache.put(urls[i], r)));
+  const keep = new Set(urls.map((u) => new URL(u, self.registration.scope).href));
+  for (const req of await cache.keys()) {
+    const path = new URL(req.url).pathname;
+    if (/\/(js|css|data)\//.test(path) && !keep.has(req.url)) await cache.delete(req);
+  }
+}
+
 self.addEventListener('install', (e) => { e.waitUntil(precache().then(() => self.skipWaiting())); });
 self.addEventListener('activate', (e) => { e.waitUntil(self.clients.claim()); });
 
@@ -24,6 +39,7 @@ self.addEventListener('fetch', (e) => {
     try {
       const res = await fetch(req, { cache: 'no-cache' });
       if (res.ok) (await caches.open(CACHE)).put(req, res.clone());
+      if (res.ok && req.mode === 'navigate') e.waitUntil(res.clone().text().then(refresh).catch(() => {}));
       return res;
     } catch (err) {
       const cache = await caches.open(CACHE);
