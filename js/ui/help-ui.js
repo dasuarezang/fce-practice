@@ -18,7 +18,7 @@
 
   const GUIDES = [
     {
-      key: 'android', label: 'Android', tone: 'tone-2', note: 'Chrome, Edge, Samsung Internet and Firefox all work. The steps below are for Chrome.',
+      key: 'android', label: 'Android', tone: 'tone-18', note: 'Chrome, Edge, Samsung Internet and Firefox all work. The steps below are for Chrome.',
       steps: [
         ['Open the web in Chrome', 'Go to the FCE Practice address. Wait for the home page to load; you need internet only this first time.', 'page'],
         ['Open the menu', 'Tap the three dots (⋮) at the top right of Chrome.', 'menu'],
@@ -29,7 +29,7 @@
       tips: ['Nothing to download from a store: it is the same web, saved on your phone.', 'After the first visit it also opens with no connection or data.', 'If “Install app” never shows up, make sure you are not in a private tab and that Chrome is up to date.'],
     },
     {
-      key: 'iphone', label: 'iPhone / iPad', tone: 'tone-3', note: 'It has to be Safari. On iPhone, Add to Home Screen is also in the share menu of Chrome and Edge from iOS 16.4, but Safari is the safe choice.',
+      key: 'iphone', label: 'iPhone / iPad', tone: 'tone-12', note: 'It has to be Safari. On iPhone, Add to Home Screen is also in the share menu of Chrome and Edge from iOS 16.4, but Safari is the safe choice.',
       steps: [
         ['Open the web in Safari', 'Go to the FCE Practice address in Safari. If a link opened inside another app (WhatsApp, Instagram…), copy it and paste it in Safari.', 'page'],
         ['Tap Share', 'The square with an arrow pointing up: at the bottom of the screen on iPhone, at the top right on iPad.', 'share'],
@@ -98,26 +98,26 @@
   const BLOCKS = [
     { icon: 'book', tone: 'tone-1', title: 'Theory', text: 'All your class notes on one page, unit by unit, in notebook order. Use the index on the left (or the buttons at the top on a phone) to jump to a section.',
       vis: () => h('div', { class: 'hv hv-lines' }, h('i'), h('i'), h('i'), h('i')) },
-    { icon: 'target', tone: 'tone-2', title: 'Practice', text: 'Tick the subtopics, pick a type (Kahoot, Match, Gap-fill, Reorder, or Mixed) and how many questions. A wrong answer comes back once at the end. Before the first question about a structure in Comparison expressions you get a short explanation of it.',
+    { icon: 'target', tone: 'tone-19', title: 'Practice', text: 'Tick the subtopics, pick a type (Kahoot, Match, Gap-fill, Reorder, or Mixed) and how many questions. A wrong answer comes back once at the end. Before the first question about a structure in Comparison expressions you get a short explanation of it.',
       vis: () => h('div', { class: 'hv' }, chip('Kahoot', 'c1'), chip('Match', 'c2'), chip('Gap-fill', 'c3'), chip('Reorder', 'c4'), chip('Mixed')) },
-    { icon: 'hand', tone: 'tone-3', title: 'How to answer', text: 'Kahoot: tap an option (or press 1–4). Gap-fill: type and press Enter or Check. Reorder: tap the words in order, or drag them. Match: drag from the dot on a left card to its match, or tap a card and then its match.',
+    { icon: 'hand', tone: 'tone-13', title: 'How to answer', text: 'Kahoot: tap an option (or press 1–4). Gap-fill: type and press Enter or Check. Reorder: tap the words in order, or drag them. Match: drag from the dot on a left card to its match, or tap a card and then its match.',
       vis: () => h('div', { class: 'hv hv-answer' },
         h('div', { class: 'hv-opts' }, ['1', '2', '3', '4'].map((n, i) => h('span', { class: 'hv-opt c' + (i + 1) }, n))),
         h('div', { class: 'hv-sentence' }, 'She ', h('b', { class: 'hv-gap' }, 'is'), ' taller'),
         h('div', { class: 'hv-pair' }, h('span', { class: 'hv-pill' }, h('i', { class: 'hv-dot' })), h('span', { class: 'hv-link' }), h('span', { class: 'hv-pill' }, h('i', { class: 'hv-dot' })))) },
-    { icon: 'clock', tone: 'tone-4', title: 'Exam', text: 'Choose “Exam” in the practice menu. It is timed: one countdown for the whole test, 40 seconds per question, shows no right or wrong until the end, and has no second chances. The pass mark is 60%. Time running out counts what is left as wrong.',
+    { icon: 'clock', tone: 'tone-5', title: 'Exam', text: 'Choose “Exam” in the practice menu. It is timed: one countdown for the whole test, 40 seconds per question, shows no right or wrong until the end, and has no second chances. The pass mark is 60%. Time running out counts what is left as wrong.',
       vis: () => h('div', { class: 'hv hv-stats' }, h('span', { class: 'hv-stat' }, h('b', null, '40 s'), 'per question'), h('span', { class: 'hv-stat' }, h('b', null, '60%'), 'to pass'), h('span', { class: 'hv-stat' }, h('b', null, '0'), 'second chances')) },
-    { icon: 'cards', tone: 'tone-1', title: 'Flashcards', text: 'Quick review of the vocabulary. Flip the card, then mark “Knew it” or “Not yet”. The ones you miss count as weak.',
+    { icon: 'cards', tone: 'tone-23', title: 'Flashcards', text: 'Quick review of the vocabulary. Flip the card, then mark “Knew it” or “Not yet”. The ones you miss count as weak.',
       vis: () => h('div', { class: 'hv hv-flash' }, h('span', { class: 'hv-fc' }, 'tall'), h('span', { class: 'hv-arrow', 'aria-hidden': 'true' }, '→'), h('span', { class: 'hv-fc back' }, 'alto'), h('span', { class: 'hv-ok' }, 'Knew it'), h('span', { class: 'hv-no' }, 'Not yet')) },
-    { icon: 'flag', tone: 'tone-3', title: 'Weak items', text: 'An item is weak when you have failed it and have not yet got it right twice in a row since. “Practise my weak items” on the home page builds a test from them, and it empties as you master them.',
+    { icon: 'flag', tone: 'tone-10', title: 'Weak items', text: 'An item is weak when you have failed it and have not yet got it right twice in a row since. “Practise my weak items” on the home page builds a test from them, and it empties as you master them.',
       vis: () => h('div', { class: 'hv hv-weak' }, h('span', { class: 'hv-dotrow' }, h('i', { class: 'x' }), h('i', { class: 'y' }), h('i', { class: 'y' })), h('span', { class: 'hv-arrow', 'aria-hidden': 'true' }, '→'), h('span', { class: 'hv-dotrow' }, h('i', { class: 'y' }), h('i', { class: 'y' }), h('b', null, 'mastered'))) },
-    { icon: 'chart', tone: 'tone-2', title: 'My progress', text: 'Shows how much you have mastered, overall and by subtopic. Your progress is saved only in this browser: to move it to another device (or keep a copy), download a backup or copy your code and import it there. Importing never removes progress you already have.',
+    { icon: 'chart', tone: 'tone-16', title: 'My progress', text: 'Shows how much you have mastered, overall and by subtopic. Your progress is saved only in this browser: to move it to another device (or keep a copy), download a backup or copy your code and import it there. Importing never removes progress you already have.',
       vis: () => h('div', { class: 'hv hv-bars' }, [82, 55, 30].map((w) => h('span', { class: 'hv-bar' }, h('i', { style: `width:${w}%` })))) },
-    { icon: 'resume', tone: 'tone-4', title: 'Unfinished tests', text: 'If you leave or reload in the middle of a practice, the home page offers to resume it. Exams cannot be resumed.',
+    { icon: 'resume', tone: 'tone-7', title: 'Unfinished tests', text: 'If you leave or reload in the middle of a practice, the home page offers to resume it. Exams cannot be resumed.',
       vis: () => h('div', { class: 'hv hv-resume' }, h('span', null, 'Practice in progress · 7 of 12'), h('b', null, 'Resume')) },
-    { icon: 'sun', tone: 'tone-3', title: 'Sound and theme', text: 'The speaker and sun/moon buttons in the top bar turn the sounds off and switch between dark and light.',
+    { icon: 'sun', tone: 'tone-14', title: 'Sound and theme', text: 'The speaker and sun/moon buttons in the top bar turn the sounds off and switch between dark and light.',
       vis: () => h('div', { class: 'hv hv-tools' }, h('span', { class: 'hv-tool' }, '♪'), h('span', { class: 'hv-tool' }, '☀'), h('span', { class: 'hv-tool' }, '☾')) },
-    { icon: 'phone', tone: 'tone-2', title: 'Offline and updates', text: 'After one visit with internet the web opens without a connection. When you are online it always loads the latest version: if I update the web, the installed app updates itself the next time you open it with internet.',
+    { icon: 'phone', tone: 'tone-21', title: 'Offline and updates', text: 'After one visit with internet the web opens without a connection. When you are online it always loads the latest version: if I update the web, the installed app updates itself the next time you open it with internet.',
       vis: () => h('div', { class: 'hv hv-sync' }, h('span', { class: 'hv-node' }, 'Web'), h('span', { class: 'hv-arrow', 'aria-hidden': 'true' }, '→'), h('span', { class: 'hv-node on' }, 'Your phone')) },
   ];
 

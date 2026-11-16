@@ -23,7 +23,7 @@ for (const [label, block] of [['dark', dark], ['light', light]]) {
   test(`${label}: text, muted text, links and result colours are readable on the page background (4.5:1)`, () => {
     const bg = get(block, 'bg');
     const card = get(block, 'card');
-    for (const name of ['text', 'muted', 'link', 'ok', 'bad', 'k1', 'k3']) {
+    for (const name of ['text', 'muted', 'link', 'ok', 'bad', 'k1', 'k3', ...Array.from({ length: 24 }, (_, i) => 'c' + (i + 1))]) {
       for (const [surfaceName, surface] of [['bg', bg], ['card', card]]) {
         const r = ratio(get(block, name), surface);
         assert.ok(r >= 4.5, `${label} --${name} on ${surfaceName} = ${r.toFixed(2)}`);

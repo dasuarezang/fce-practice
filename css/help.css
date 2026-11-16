@@ -1,8 +1,29 @@
-/* How it works: every card has a tone from the site palette (--k1 blue, --k2 green, --k3 orange, --k4 purple). Flat colours only. */
-.tone-1 { --tone: var(--k1); }
-.tone-2 { --tone: var(--k2); }
-.tone-3 { --tone: var(--k3); }
-.tone-4 { --tone: var(--k4); }
+/* How it works: every card has a tone from the site palette (24 tones, --c1 to --c24). Flat colours only. */
+/* .tone-1 ... .tone-24 take --c1 ... --c24 (see base.css); .tone-1..4 keep the old four. */
+.tone-1 { --tone: var(--c1); }
+.tone-2 { --tone: var(--c2); }
+.tone-3 { --tone: var(--c3); }
+.tone-4 { --tone: var(--c4); }
+.tone-5 { --tone: var(--c5); }
+.tone-6 { --tone: var(--c6); }
+.tone-7 { --tone: var(--c7); }
+.tone-8 { --tone: var(--c8); }
+.tone-9 { --tone: var(--c9); }
+.tone-10 { --tone: var(--c10); }
+.tone-11 { --tone: var(--c11); }
+.tone-12 { --tone: var(--c12); }
+.tone-13 { --tone: var(--c13); }
+.tone-14 { --tone: var(--c14); }
+.tone-15 { --tone: var(--c15); }
+.tone-16 { --tone: var(--c16); }
+.tone-17 { --tone: var(--c17); }
+.tone-18 { --tone: var(--c18); }
+.tone-19 { --tone: var(--c19); }
+.tone-20 { --tone: var(--c20); }
+.tone-21 { --tone: var(--c21); }
+.tone-22 { --tone: var(--c22); }
+.tone-23 { --tone: var(--c23); }
+.tone-24 { --tone: var(--c24); }
 .help-sub { margin: 34px 0 14px; }
 .title-m { font-size: 22px; font-weight: 700; }
 .kicker { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tone, var(--link)); margin-bottom: 6px; }
