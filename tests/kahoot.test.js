@@ -137,3 +137,17 @@ test('bad: asking the superlative offers "worse" among the options', () => {
   }
   assert.ok(seen);
 });
+
+test('phrasal verb distractors are the most similar ones ("come along" competes with the other "come" verbs)', () => {
+  const entries = ofSection('t2-phrasal');
+  let seen = 0;
+  for (let seed = 1; seed <= 40; seed++) {
+    for (const q of FCE.gen.kahoot(entries, pool('pares'), FCE.rng.make(seed))) {
+      if (q.itemIds[0] === 't2-pv-come-along' && q.options.includes('come along')) {
+        seen++;
+        assert.ok(q.options.includes('come across') && q.options.includes('come up against'), q.options.join(' | '));
+      }
+    }
+  }
+  assert.ok(seen > 0);
+});

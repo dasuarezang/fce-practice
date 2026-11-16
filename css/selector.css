@@ -110,3 +110,14 @@ button.choice .choice-go { top: 24px; right: 26px; }
 
 .resume { margin-bottom: 18px; padding: 16px 22px; gap: 12px 14px; border-color: var(--link); }
 .weak-btn { align-self: flex-start; }
+
+/* Progress screen */
+.prog-over .big-count { font-size: 64px; }
+.prog-row { display: flex; align-items: center; gap: 16px; padding-top: 10px; border-top: 1px solid var(--line); }
+.prog-row:first-of-type { border-top: 0; padding-top: 0; }
+.prog-row .btn { flex: none; padding: 9px 18px; }
+.code-box { width: 100%; font: 13px ui-monospace, Menlo, Consolas, monospace; color: var(--text); background: var(--glass-bg-strong); border: 1px solid var(--glass-border); border-radius: 14px; padding: 12px; resize: vertical; }
+.tally:not(.ok):not(.bad) { color: var(--muted); background: var(--line); }
+.exam-note { font-size: 14px; margin-top: 8px; min-height: 1.2em; }
+
+.home-tools { margin-top: 20px; }

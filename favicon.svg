@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#080d1c"/>
+  <rect x="270" y="-60" width="260" height="290" rx="90" fill="#17594a" transform="rotate(14 400 85)"/>
+  <rect x="-70" y="300" width="250" height="280" rx="90" fill="#78461a" transform="rotate(8 55 440)"/>
+  <rect x="330" y="330" width="190" height="220" rx="80" fill="#35276f" transform="rotate(-10 425 440)"/>
+  <rect x="86" y="146" width="340" height="220" rx="56" fill="#1a2140" stroke="#ffffff" stroke-opacity="0.22" stroke-width="3"/>
+  <text x="256" y="300" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-weight="800" font-size="150" letter-spacing="-4" fill="#eef1fa">FCE</text>
+  <rect x="176" y="326" width="160" height="10" rx="5" fill="#2563eb"/>
+</svg>

@@ -81,3 +81,12 @@ test('snapshot -> JSON -> restore continues exactly where the session was', () =
   assert.deepStrictEqual(r.summary(), { total: 3, correct: 2, wrongItemIds: ['a'] });
   assert.strictEqual(r.log().length, 3);
 });
+
+test('exam sessions (retries off) never requeue a wrong answer', () => {
+  const s = FCE.session.create([q('a'), q('b')], null, { retries: false });
+  s.submit(false);
+  assert.strictEqual(s.total(), 2);
+  s.submit(true);
+  assert.strictEqual(s.done(), true);
+  assert.deepStrictEqual(s.summary(), { total: 2, correct: 1, wrongItemIds: ['a'] });
+});

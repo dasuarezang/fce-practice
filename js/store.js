@@ -66,11 +66,61 @@
       return Object.keys(items).filter((id) => items[id] && items[id].wrong > 0 && (items[id].run | 0) < WEAK_RUN);
     }
 
+    // Backup of the progress as plain data (a file or a copyable code) and its safe re-import.
+    function exportData() {
+      return { app: 'fce-practice', version: 1, exported: new Date().toISOString(), items: JSON.parse(JSON.stringify(load())) };
+    }
+
+    function clean(v) {
+      const n = Number(v);
+      return Number.isFinite(n) ? Math.max(0, Math.min(1e6, Math.floor(n))) : 0;
+    }
+
+    // Merge, never overwrite: for each item the record with more attempts wins (ties: more mistakes).
+    // Returns the number of items taken from the backup, or -1 if the data is not a valid backup.
+    function importData(data) {
+      if (!data || typeof data !== 'object' || data.app !== 'fce-practice' || !data.items || typeof data.items !== 'object' || Array.isArray(data.items)) return -1;
+      const items = load();
+      let taken = 0;
+      for (const id of Object.keys(data.items)) {
+        const inc = data.items[id];
+        if (id.length > 120 || !inc || typeof inc !== 'object') continue;
+        const next = { seen: clean(inc.seen), wrong: clean(inc.wrong), run: clean(inc.run) };
+        if (next.seen === 0 && next.wrong === 0) continue;
+        const cur = items[id] && typeof items[id] === 'object' ? items[id] : { seen: 0, wrong: 0 };
+        if (next.seen > (cur.seen | 0) || (next.seen === (cur.seen | 0) && next.wrong > (cur.wrong | 0))) {
+          items[id] = next;
+          taken++;
+        }
+      }
+      save(items);
+      return taken;
+    }
+
+    // Short text version of the backup, to send to yourself (WhatsApp, notes...).
+    function toCode() {
+      const compact = { a: 'fce-practice', v: 1, i: {} };
+      const items = load();
+      for (const id of Object.keys(items)) compact.i[id] = [items[id].seen | 0, items[id].wrong | 0, items[id].run | 0];
+      return 'FCE1:' + btoa(JSON.stringify(compact));
+    }
+    function fromCode(text) {
+      try {
+        const m = /FCE1:([A-Za-z0-9+/=]+)/.exec(String(text).replace(/\s+/g, ''));
+        if (!m) return null;
+        const c = JSON.parse(atob(m[1]));
+        if (!c || c.a !== 'fce-practice' || !c.i || typeof c.i !== 'object') return null;
+        const items = {};
+        for (const id of Object.keys(c.i)) if (Array.isArray(c.i[id])) items[id] = { seen: c.i[id][0], wrong: c.i[id][1], run: c.i[id][2] };
+        return { app: 'fce-practice', version: 1, items };
+      } catch (e) { return null; }
+    }
+
     function reset() {
       save({});
     }
 
-    return { record, stats, failedIds, weakIds, reset };
+    return { record, stats, failedIds, weakIds, exportData, importData, toCode, fromCode, reset };
   }
 
   FCE.store = { create };

@@ -18,17 +18,21 @@
     const selected = new Set();
     const pre = temas.find((t) => t.id === (params && params.temaId));
     for (const id of pre ? allIds(pre) : []) selected.add(id);
+    for (const id of (params && params.sectionIds) || []) selected.add(id);
 
+    let exam = false;
     let kind = 'mixto';
     let length = 10;
 
     const counter = h('span', { class: 'counter', 'aria-live': 'polite' });
     const bigCount = h('span', { class: 'big-count' });
     const bigLabel = h('span', { class: 'muted' });
+    const examNote = h('p', { class: 'muted exam-note' });
     const message = h('p', { class: 'muted small-msg', role: 'status' });
     const startBtn = h('button', { class: 'btn start-main', type: 'button', onclick: start }, 'Start');
     const startBtn2 = h('button', { class: 'btn', type: 'button', onclick: start }, 'Start');
     const kindBox = h('div', { class: 'pills', role: 'group', 'aria-label': 'Exercise type' });
+    const modeBox = h('div', { class: 'pills', role: 'group', 'aria-label': 'Mode' });
     const lengthBox = h('div', { class: 'pills', role: 'group', 'aria-label': 'Number of questions' });
     const inputs = new Map(); // sectionId -> input
     const tiles = new Map(); // sectionId -> label
@@ -66,6 +70,10 @@
           }, KIND_LABELS[k]);
         })
       );
+      modeBox.replaceChildren(
+        h('button', { class: 'pill' + (!exam ? ' on' : ''), type: 'button', 'data-mode': 'practice', 'aria-pressed': String(!exam), onclick: () => { exam = false; refresh(); } }, 'Practice'),
+        h('button', { class: 'pill' + (exam ? ' on' : ''), type: 'button', 'data-mode': 'exam', 'aria-pressed': String(exam), onclick: () => { exam = true; refresh(); } }, 'Exam'));
+      examNote.textContent = exam ? 'Timed (40 s per question), no feedback until the end. Pass mark: 60%.' : '';
       lengthBox.replaceChildren(
         ...LENGTHS.map(([v, label]) =>
           h('button', {
@@ -84,7 +92,7 @@
         message.textContent = 'This selection has no questions of that type. Try another type.';
         return;
       }
-      FCE.app.go('practice', { questions });
+      FCE.app.go('practice', { questions, exam });
     }
 
     el.append(h('h1', { class: 'title-l' }, 'Choose what to practise'),
@@ -135,6 +143,7 @@
     const side = h('aside', { class: 'card sel-side' },
       h('span', { class: 'eyebrow' }, 'Your practice'),
       h('div', { class: 'stack', style: 'gap:2px' }, bigCount, bigLabel),
+      h('div', null, h('span', { class: 'eyebrow' }, 'Mode'), modeBox, examNote),
       h('div', null, h('span', { class: 'eyebrow' }, 'Exercise type'), kindBox),
       h('div', null, h('span', { class: 'eyebrow' }, 'Questions'), lengthBox),
       startBtn, message);

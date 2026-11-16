@@ -70,7 +70,10 @@
             h('span', { class: 'muted' }, 'Choose subtopics and the type of exercise.'),
             h('span', { class: 'choice-go', 'aria-hidden': 'true' }, '→')),
           progress, weakBtn)),
-      h('p', { style: 'margin-top:28px' },
+      h('div', { class: 'row home-tools' },
+        h('button', { class: 'btn secondary', type: 'button', 'data-go': 'flashcards', onclick: () => FCE.app.go('flashcards') }, 'Flashcards'),
+        h('button', { class: 'btn secondary', type: 'button', 'data-go': 'progress', onclick: () => FCE.app.go('progress') }, 'My progress')),
+      h('p', { style: 'margin-top:20px' },
         h('button', { class: 'linklike', type: 'button', onclick: () => FCE.app.go('coverage') }, 'View coverage of the syllabus')));
   };
 })(globalThis);

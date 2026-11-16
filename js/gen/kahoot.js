@@ -16,11 +16,32 @@
     return sameSectionOnly ? [same] : [same, rest];
   }
 
-  function assemble(entry, rng, prompt, correct, groups, explain) {
+  // Similarity between two option texts, to pick distractors that really compete with the answer:
+  // same first word ("come across" / "come along"), shared content words, shared prefix ("un-").
+  const STOP = new Set(['to', 'a', 'an', 'the', 'of', 'or', 'and', 'in', 'on', 'be', 'is', 'someone', 'something', 'with', 'from', 'that']);
+  const words = (s) => String(s).toLowerCase().split(/[^a-z']+/).filter((w) => w && !STOP.has(w));
+  function similarity(a, b) {
+    const wa = words(a);
+    const wb = words(b);
+    let score = wa.filter((w) => wb.includes(w)).length * 2;
+    if (wa[0] && wa[0] === wb[0]) score += 3;
+    let k = 0;
+    const x = String(a).toLowerCase();
+    const y = String(b).toLowerCase();
+    while (k < x.length && k < y.length && x[k] === y[k]) k++;
+    if (k >= 3) score += 1;
+    return score;
+  }
+
+  function assemble(entry, rng, prompt, correct, groups, explain, similar) {
+    if (similar) {
+      // shuffle first so ties vary between attempts, then most similar to the answer first
+      groups = groups.map((g) => rng.shuffle(g).map((c) => ({ c, s: similarity(c.text, correct) })).sort((p, q) => q.s - p.s).map((x) => x.c));
+    }
     const chosen = [];
     const seen = new Set([correct]);
     for (const group of groups) {
-      for (const c of rng.shuffle(group)) {
+      for (const c of similar ? group : rng.shuffle(group)) {
         if (chosen.length >= 3) break;
         if (seen.has(c.text)) continue;
         seen.add(c.text);
@@ -52,14 +73,14 @@
         const explain = `${it.termino} = ${it.definicion}`;
         if (rng.next() < 0.5) {
           return assemble(entry, rng, `What does “${it.termino}” mean?`, it.definicion,
-            candidates(entry, pool, (i) => i.definicion, (i) => i.termino), explain);
+            candidates(entry, pool, (i) => i.definicion, (i) => i.termino), explain, true);
         }
         return assemble(entry, rng, `Which expression means “${it.definicion}”?`, it.termino,
-          candidates(entry, pool, (i) => i.termino, (i) => i.termino), explain);
+          candidates(entry, pool, (i) => i.termino, (i) => i.termino), explain, true);
       }
       case 'antonimos':
         return assemble(entry, rng, `What is the opposite of “${it.positivo}”?`, it.negativo,
-          candidates(entry, pool, (i) => i.negativo, (i) => i.positivo), `${it.positivo} ↔ ${it.negativo}`);
+          candidates(entry, pool, (i) => i.negativo, (i) => i.positivo), `${it.positivo} ↔ ${it.negativo}`, true);
       case 'colocaciones': {
         const options = ['do', 'make'];
         return {

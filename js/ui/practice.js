@@ -11,18 +11,46 @@
       return;
     }
     el.classList.add('has-dock');
-    const session = resume ? FCE.session.restore(resume) : FCE.session.create(questions);
+    const exam = !!(params && params.exam && !resume);
+    const SECONDS_PER_QUESTION = 40;
+    const session = resume ? FCE.session.restore(resume) : FCE.session.create(questions, null, { retries: !exam });
     const bar = h('i', { style: 'width:0%' });
     const counter = h('span', { class: 'muted' });
+    const timerEl = h('span', { class: 'timer', hidden: !exam });
     const stage = h('div', { class: 'stage' });
     const sheetHost = h('div');
     el.append(
       h('div', { class: 'stack', style: 'gap:10px;margin-bottom:22px' },
-        h('div', { class: 'row', style: 'justify-content:space-between' }, h('span', { class: 'eyebrow' }, 'Practice'), counter),
+        h('div', { class: 'row', style: 'justify-content:space-between' }, h('span', { class: 'eyebrow' }, exam ? 'Exam' : 'Practice'), h('span', { class: 'row', style: 'gap:14px' }, timerEl, counter)),
         h('div', { class: 'progress' }, bar)),
       stage, sheetHost);
 
     const taught = new Set();
+
+    // Exam: one countdown for the whole test; when it ends, what is left counts as wrong.
+    let timer = null;
+    function stopTimer() { if (timer) { clearInterval(timer); timer = null; } }
+    function finishExam() {
+      stopTimer();
+      while (!session.done()) session.submit(false);
+      show();
+    }
+    if (exam) {
+      let left = questions.length * SECONDS_PER_QUESTION;
+      const paint = () => {
+        const m = Math.floor(left / 60);
+        const s = String(left % 60).padStart(2, '0');
+        timerEl.textContent = `${m}:${s}`;
+        timerEl.classList.toggle('low', left <= 30);
+      };
+      paint();
+      timer = setInterval(() => {
+        if (!el.isConnected) { stopTimer(); return; }
+        left--;
+        paint();
+        if (left <= 0) finishExam();
+      }, 1000);
+    }
 
     // A structure is explained once, before the first question that uses it.
     function teach(entries, then) {
@@ -42,11 +70,12 @@
       sheetHost.replaceChildren();
       const q = session.current();
       if (!q) {
-        FCE.saved.clear();
-        FCE.app.go('results', { summary: session.summary(), log: session.log(), questions });
+        stopTimer();
+        if (!exam) FCE.saved.clear();
+        FCE.app.go('results', { summary: session.summary(), log: session.log(), questions, exam });
         return;
       }
-      const fresh = FCE.practice.teachEntries(q).filter((e) => !taught.has(e.item.id));
+      const fresh = exam ? [] : FCE.practice.teachEntries(q).filter((e) => !taught.has(e.item.id));
       if (fresh.length) {
         fresh.forEach((e) => taught.add(e.item.id));
         counter.textContent = `${session.index() + 1} / ${session.total()}`;
@@ -73,6 +102,13 @@
         if (answered) return;
         answered = true;
         FCE.progress.record(q.itemIds, ok);
+        if (exam) {
+          // No verdict until the end: record the answer and move on.
+          session.submit(ok);
+          if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+          setTimeout(() => { if (el.isConnected) show(); }, 180);
+          return;
+        }
         if (FCE.sound) FCE.sound.play(ok ? 'right' : 'wrong');
         session.submit(ok);
         if (session.done()) FCE.saved.clear();

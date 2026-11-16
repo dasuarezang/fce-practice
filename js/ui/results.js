@@ -24,6 +24,7 @@
       data = {
         summary: params.summary,
         rows: log.map(({ q, ok }) => ({ ok, text: q.explain || q.prompt || '' })),
+        exam: !!params.exam,
       };
       remember(data);
       fresh = true;
@@ -44,7 +45,7 @@
     const wrongCount = summary.total - summary.correct;
 
     const score = h('div', { class: 'stack', style: 'gap:8px' },
-      h('span', { class: 'eyebrow res-eyebrow' }, pct >= PASS ? 'Your result · passed' : 'Your result · not passed yet'),
+      h('span', { class: 'eyebrow res-eyebrow' }, (data.exam ? 'Exam result' : 'Your result') + (pct >= PASS ? ' · passed' : ' · not passed yet')),
       h('h1', { class: 'title-xl res-pct', 'data-pct': pct }, pct + '%'),
       h('p', { class: 'muted' }, `${summary.correct} of ${summary.total} right first time.`),
       h('div', { class: 'res-tally' },

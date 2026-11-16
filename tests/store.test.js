@@ -80,3 +80,30 @@ test('weakIds: failed items stay weak until answered right twice in a row', () =
   s.record(['a'], false);
   assert.deepStrictEqual(s.weakIds(), ['a']);
 });
+
+test('export/import: merge keeps the record with more attempts and rejects foreign data', () => {
+  const a = FCE.store.create(memory());
+  a.record(['x'], false); a.record(['x'], true); a.record(['y'], true);
+  const b = FCE.store.create(memory());
+  b.record(['x'], true);
+  b.record(['z'], false);
+  assert.strictEqual(b.importData(a.exportData()), 2); // x (2 attempts > 1) and y
+  assert.deepStrictEqual(b.stats('x'), { seen: 2, wrong: 1 });
+  assert.deepStrictEqual(b.stats('y'), { seen: 1, wrong: 0 });
+  assert.deepStrictEqual(b.stats('z'), { seen: 1, wrong: 1 });
+  assert.strictEqual(b.importData({ app: 'other', items: {} }), -1);
+  assert.strictEqual(b.importData(null), -1);
+  assert.strictEqual(b.importData({ app: 'fce-practice', items: { bad: { seen: 'NaN', wrong: -5 } } }), 0);
+});
+
+test('code round-trip through toCode/fromCode, and garbage is rejected', () => {
+  const a = FCE.store.create(memory());
+  a.record(['p'], false); a.record(['q'], true);
+  const code = a.toCode();
+  assert.ok(code.startsWith('FCE1:'));
+  const b = FCE.store.create(memory());
+  assert.strictEqual(b.importData(FCE.store.create(memory()).fromCode('  ' + code + '\n')), 2);
+  assert.deepStrictEqual(b.stats('p'), { seen: 1, wrong: 1 });
+  assert.strictEqual(FCE.store.create(memory()).fromCode('hello'), null);
+  assert.strictEqual(FCE.store.create(memory()).fromCode('FCE1:!!!'), null);
+});

@@ -112,6 +112,9 @@
     app.append(bar, screenEl, foot);
     pinBackground();
     root.addEventListener('hashchange', render);
+    if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+      navigator.serviceWorker.register('sw.js').catch(() => { /* no offline mode; the web still works */ });
+    }
     render();
   }
 

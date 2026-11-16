@@ -61,3 +61,19 @@
 .theory, .th-tema { scroll-margin-top: 84px; }
 .t-example { white-space: pre-line; }
 @media (max-width: 900px) { .th-unit { flex: 1 0 100%; padding: 8px 8px 2px; } }
+
+/* Unit banner: a coloured, full-width break between units */
+.th-tema { margin-bottom: 56px; }
+.th-tema:not(:first-child) { margin-top: 28px; padding-top: 0; }
+.th-banner {
+  position: relative;
+  padding: 26px 28px;
+  border-radius: 22px;
+  background: var(--glass-bg-strong);
+  border: 1px solid var(--glass-border);
+  border-left: 10px solid var(--unit);
+  box-shadow: var(--glass-edge);
+}
+.th-banner-kicker { display: block; font-size: 13px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--unit); margin-bottom: 6px; }
+.th-banner-title { font-size: clamp(30px, 6vw, 44px); font-weight: 750; letter-spacing: -0.035em; line-height: 1.02; }
+.th-unit { border-left: 3px solid var(--line); border-radius: 0 12px 12px 0; }

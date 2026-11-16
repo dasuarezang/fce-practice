@@ -4,7 +4,11 @@ Web para estudiar el temario de inglés del FCE (Cambridge First) con los apunte
 
 - Elige temas y subtemas, y practica con ejercicios tipo Kahoot, relacionar con flechas, rellenar huecos y ordenar palabras.
 - Consulta la teoría (tus apuntes en limpio) y la pantalla de **Cobertura** para ver qué has practicado.
-- El progreso se guarda solo en tu navegador (`localStorage`).
+- El progreso se guarda solo en tu navegador (`localStorage`). En **My progress** puedes ver el dominio por subtema, hacer copia (archivo o código corto), importarla en otro dispositivo (se fusiona, no borra) y reiniciar.
+- **Practise my weak items**: mezcla lo que sigues fallando (fallado y no acertado dos veces seguidas después). Un test a medias se puede retomar desde la portada.
+- **Exam**: test cronometrado (40 s por pregunta), sin feedback hasta el final, aprobado al 60 %.
+- **Flashcards** para el vocabulario; lo que marcas como "Not yet" cuenta como débil.
+- Instalable y con modo sin conexión (`manifest.webmanifest`, `sw.js`: red primero, así online siempre ves lo último).
 
 ## Ejecutar en local
 

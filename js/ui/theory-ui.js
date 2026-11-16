@@ -2,6 +2,7 @@
   const FCE = (root.FCE = root.FCE || {});
   const { h } = FCE.dom;
 
+  const ACCENT = { t1: 'var(--t1)', t2: 'var(--t2)' };
   const GROUPS = [
     ['vocabulario', 'Vocabulary'],
     ['gramatica', 'Grammar'],
@@ -21,8 +22,11 @@
 
     for (const tema of FCE.temas) {
       nav.append(h('button', { class: 'th-unit', type: 'button', onclick: () => jump('th-' + tema.id) }, tema.titulo));
-      const unit = h('section', { class: 'th-tema stack', id: 'th-' + tema.id },
-        h('h2', { class: 'title-l th-tema-title' }, tema.titulo));
+      const num = tema.titulo.match(/^(\d+)\./);
+      const unit = h('section', { class: 'th-tema stack', id: 'th-' + tema.id, style: `--unit:${ACCENT[tema.id] || 'var(--link)'}` },
+        h('div', { class: 'th-banner' },
+          h('span', { class: 'th-banner-kicker' }, num ? `Unit ${num[1]}` : 'Unit'),
+          h('h2', { class: 'th-banner-title' }, tema.titulo.replace(/^\d+\.\s*/, ''))));
       for (const [grupo, label] of GROUPS) {
         const secs = tema.secciones.filter((s) => s.grupo === grupo);
         if (!secs.length) continue;

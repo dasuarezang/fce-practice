@@ -1,7 +1,8 @@
 (function (root) {
   const FCE = (root.FCE = root.FCE || {});
 
-  function create(questions, snap) {
+  function create(questions, snap, opts) {
+    const retries = !(opts && opts.retries === false);
     const queue = snap ? snap.queue.map((x) => ({ q: x.q, retry: !!x.retry })) : questions.map((q) => ({ q, retry: false }));
     let pos = snap ? snap.pos : 0;
     let originalCorrect = snap ? snap.originalCorrect : 0;
@@ -20,7 +21,7 @@
         if (ok) originalCorrect++;
         else {
           for (const id of entry.q.itemIds) if (!wrong.includes(id)) wrong.push(id);
-          queue.push({ q: entry.q, retry: true }); // one retry only
+          if (retries) queue.push({ q: entry.q, retry: true }); // one retry only (not in exams)
         }
       }
       pos++;
