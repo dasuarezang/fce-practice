@@ -109,7 +109,9 @@
       h('div', { class: 'foot-inner glass' },
         h('p', { class: 'foot-note' }, 'Independent, non-profit study resource based on personal class notes. Not affiliated with or endorsed by Cambridge University Press & Assessment.'),
         h('p', { class: 'foot-links' },
-          h('button', { class: 'linklike', type: 'button', onclick: () => go('help') }, 'How it works'),
+          h('button', { class: 'linklike help-link', type: 'button', onclick: () => go('help') },
+            h('span', { class: 'help-mark', 'aria-hidden': 'true', html: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M9.2 9.2a2.9 2.9 0 1 1 4.1 2.6c-.8.4-1.3 1-1.3 1.9"/><path d="M12 17.2h.01"/></svg>' }),
+            'How it works'),
           h('span', { 'aria-hidden': 'true' }, '·'),
           h('a', { class: 'foot-by', href: 'https://dasuarezang.github.io/', target: '_blank', rel: 'noopener noreferrer', 'aria-label': 'by DSA (opens my CV website in a new tab)' }, 'by DSA'))));
     app.append(bar, screenEl, foot);

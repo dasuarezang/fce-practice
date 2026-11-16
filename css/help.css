@@ -91,3 +91,8 @@
   .step-art { grid-column: 2; }
   .step-art svg { width: 84px; }
 }
+
+/* Footer link to How it works: a small question-mark badge in the link colour */
+.help-link { display: inline-flex; align-items: center; gap: 6px; }
+.help-mark { display: inline-grid; place-items: center; width: 16px; height: 16px; color: var(--link); }
+.help-mark svg { width: 16px; height: 16px; }
